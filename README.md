@@ -43,10 +43,7 @@ A modern alternative to the default Twitch picker and the FrankerFaceZ extension
 2. Go to Chrome → `chrome://extensions/`
 3. Enable “Developer mode”
 4. Click “Load unpacked” → select the folder containing `manifest.json`
-
-## License - MIT
-
-
+ 
 
 
 ## ___ UI _____
