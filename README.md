@@ -41,4 +41,12 @@ A modern alternative to the default Twitch picker and the FrankerFaceZ extension
 
 ## License
 MIT
+
+
+
+## UI 
+## screenshot's
+
+
+
  
