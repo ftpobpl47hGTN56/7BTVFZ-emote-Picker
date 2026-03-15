@@ -23,15 +23,15 @@ A modern alternative to the default Twitch picker and the FrankerFaceZ extension
 ## Why it's better than the built-in FFZ picker?
 
 | Feature                                | FFZ (2025–2026)     | 7BTVFZ Picker     |
-|----------------------------------------|----------------------|-------------------|
+|----------------------------------------|---------------------|-------------------|
 | List virtualization (fast scrolling)   | No / weak           | Full              |
 | 7TV zero-width layers                  | Partial             | Full support      |
-| Notifications about emote changes      | No                  | Yes (in chat)     |
-| Autocompletion from all sources        | No / basic          | Yes, fast         |
-| Per-channel favorites                  | No                  | Yes               |
-| Hover tooltip with author & preview    | No                  | Yes               |
+| Notifications about emote changes      | Yes (7tv style)     | Yes (in chat)     |
+| Autocompletion from all sources        | Yes / basic         | Yes, fast         |
+| Per-channel favorites                  | Yes                 | Yes               |
+| Hover tooltip with author & preview    | Yes                 | Yes               |
 | Separate beautiful popout window       | No                  | Yes               |
-| Good handling of Twitch SPA navigation | Average             | Excellent         |
+| Handling of Twitch SPA navigation      | Average             | Excellent         |
 
 ## Installation (currently for developers only)
 1. Download the repository as ZIP
