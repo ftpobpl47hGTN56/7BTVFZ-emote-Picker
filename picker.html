@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>7BTVFZ Emote Picker</title>
+  <link rel="stylesheet" href="picker.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Header ── -->
+    <div class="header">
+      <span class="logo">7BTVFZ</span>
+      <span class="header-title">7BTVFZ Emote Picker</span>
+      <span class="header-channel" id="header-channel">—</span>
+    </div>
+
+    <div class="body-wrap">
+
+      <!-- ── Vertical sidebar ── -->
+      <div class="sidebar" id="tabs">
+
+        <div class="tab-group-label">Избранное</div>
+        <div class="tab tab--favs active" data-tab="favs">⭐Favs</div>
+
+        <div class="tab-group-label">7TV</div>
+        <div class="tab" data-tab="7tv-ch"><span class="tab-icon">📺</span>Channel</div>
+        <div class="tab" data-tab="7tv-gl"><span class="tab-icon">🌐</span>Global</div>
+
+        <div class="tab-group-label">BTTV</div>
+        <div class="tab" data-tab="bttv-ch"><span class="tab-icon">📺</span>Channel</div>
+        <div class="tab" data-tab="bttv-gl"><span class="tab-icon">🌐</span>Global</div>
+
+        <div class="tab-group-label">FFZ</div>
+        <div class="tab" data-tab="ffz-ch"><span class="tab-icon">📺</span>Channel</div>
+        <div class="tab" data-tab="ffz-gl"><span class="tab-icon">🌐</span>Global</div>
+
+      </div>
+
+      <!-- ── Main ── -->
+      <div class="main">
+
+        <div class="search-wrap">
+          <input id="search" class="search"
+                 placeholder="Search emotes…"
+                 autocomplete="off" spellcheck="false" />
+        </div>
+
+        <div class="grid-wrap">
+          <div class="grid" id="grid">
+            <div class="state-msg"><div class="icon">⏳</div>Loading…</div>
+          </div>
+        </div>
+
+        <div class="pagination">
+          <button class="page-btn" id="prev" disabled>&#9664;</button>
+          <span class="page-label" id="page-label">— / —</span>
+          <button class="page-btn" id="next" disabled>&#9654;</button>
+          <button class="send-btn" id="send-chat">Send ➤</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script src="picker.js"></script>
+</body>
+</html>

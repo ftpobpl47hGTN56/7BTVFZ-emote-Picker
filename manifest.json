@@ -1,0 +1,75 @@
+{
+  "manifest_version": 3,
+  "name": "7BTVFZ Emote Picker [Twitch] ",
+  "version": "0.14.03",
+  "description": "Custom emote picker for Twitch chat: 7TV, BTTV, FFZ",
+   "icons": {
+    "48": "assets/bttn-53335hdtndtntdntd.png",
+    "64": "assets/bttn-53335hdtndtntdntd.png",
+    "128": "assets/bttn-53335hdtndtntdntd.png"
+  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+     "scripting",
+    "webNavigation",
+    "storage"
+  ],
+  "host_permissions": [
+      "https://www.twitch.tv/*", 
+      "https://7tv.app/*",   
+      "https://7tv.io/*",
+      "https://api.betterttv.net/*",
+      "*://www.twitch.tv/*",
+      "*://7tv.io/*",
+      "*://events.7tv.io/*",
+      "wss://events.7tv.io/*",
+      "https://api.frankerfacez.com/*"
+  ],
+ "content_scripts": [
+  {
+    "matches": [
+      "*://*.twitch.tv/*",
+      "https://www.twitch.tv/*"
+    ],
+    "js": [
+      "content.js",
+      "GraphQL-seventv-fix.js",
+      "Inject_css.js",
+      "chat/emote-events.js",
+      "chat/send_in-chat_from-popup-emote.js",
+      "chat/EmotePopup-7BTVFZ.js",
+      "chat/autocomplete.js",
+      "chat/TOOLTIP_Emote_hover.js"
+    ],
+    "run_at": "document_idle"
+  },
+  {
+    "matches": [
+      "https://7tv.app/*"
+    ],
+    "js": [
+      "GraphQL-seventv-fix.js"
+    ],
+    "run_at": "document_start",
+    "world": "MAIN"
+  }
+],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "picker.html",
+        "picker.js",
+        "picker.css",
+         "chat/*",
+        "assets/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
