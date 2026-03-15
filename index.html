@@ -1,16 +1,186 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Privacy Policy - 7BTVFZ Emote Picker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Политика конфиденциальности — 7BTVFZ Emote Picker</title>
+    <style>
+        :root {
+            --bg: #0f0f17;
+            --text: #e0e0ff;
+            --accent: #a78bfa;
+            --card: #1a1a2e;
+            --border: #2a2a40;
+            --btn-bg: #6d28d9;
+            --btn-hover: #7c3aed;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .lang-switch {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .lang-btn {
+            background: var(--btn-bg);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.4rem;
+            margin: 0 0.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background: var(--btn-hover);
+            transform: translateY(-1px);
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            box-shadow: 0 0 12px rgba(167, 139, 250, 0.5);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: var(--accent);
+            margin-bottom: 1.2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .date {
+            text-align: center;
+            color: #8a8ab8;
+            font-size: 0.95rem;
+            margin-bottom: 2.2rem;
+        }
+
+        .content-ru, .content-en {
+            display: none;
+        }
+
+        .content-ru.active, .content-en.active {
+            display: block;
+        }
+
+        p {
+            margin-bottom: 1.4rem;
+            font-size: 1.05rem;
+            color: #d0d0e8;
+        }
+
+        .highlight {
+            color: #c4b5fd;
+            font-weight: 500;
+        }
+
+        .strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        code {
+            background: #0d0d1a;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 1.8rem 1.4rem; }
+            h1 { font-size: 1.9rem; }
+            .lang-btn { padding: 0.6rem 1.1rem; font-size: 0.95rem; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Privacy Policy</h1>
-    
-    <p>The 7BTVFZ Emote Picker extension for Twitch does not collect, store, use, or transmit any personal user data.</p>
-    
-    <p>All data (the list of favorite emotes) is stored exclusively locally in the user's browser using chrome.storage.local and is never sent anywhere.</p>
-    
-    <p>Date: March 2026</p>
+
+    <div class="container">
+        <div class="lang-switch">
+            <button class="lang-btn active" data-lang="ru">Русский</button>
+            <button class="lang-btn" data-lang="en">English</button>
+        </div>
+
+        <h1 data-ru="Политика конфиденциальности" data-en="Privacy Policy">
+            Политика конфиденциальности
+        </h1>
+
+        <div class="date" data-ru="Март 2026" data-en="March 2026">
+            Март 2026
+        </div>
+
+        <!-- Русская версия -->
+        <div class="content-ru active">
+            <p>Расширение <span class="strong">7BTVFZ Emote Picker</span> для Twitch <span class="highlight">не собирает</span>, <span class="highlight">не хранит</span>, <span class="highlight">не использует</span> и <span class="highlight">не передаёт</span> никакие персональные данные пользователя.</p>
+
+            <p>Единственные данные, которые сохраняются — это <span class="highlight">список избранных смайликов</span>. Они хранятся исключительно локально в браузере пользователя с помощью <code>chrome.storage.local</code> и <span class="highlight">никогда</span> не отправляются на какие-либо серверы, третьим лицам или разработчику.</p>
+
+            <p>Расширение работает полностью оффлайн в части хранения и обработки ваших предпочтений.</p>
+        </div>
+
+        <!-- Английская версия -->
+        <div class="content-en">
+            <p>The <span class="strong">7BTVFZ Emote Picker</span> extension for Twitch <span class="highlight">does not collect</span>, <span class="highlight">store</span>, <span class="highlight">use</span>, or <span class="highlight">transmit</span> any personal user data.</p>
+
+            <p>The only data that is saved is the <span class="highlight">list of favorite emotes</span>. It is stored exclusively locally in the user's browser using <code>chrome.storage.local</code> and is <span class="highlight">never</span> sent to any servers, third parties, or the developer.</p>
+
+            <p>The extension operates completely offline regarding the storage and processing of your preferences.</p>
+        </div>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll('.lang-btn');
+        const title = document.querySelector('h1');
+        const dateEl = document.querySelector('.date');
+        const ruContent = document.querySelector('.content-ru');
+        const enContent = document.querySelector('.content-en');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Убираем active со всех кнопок
+                buttons.forEach(b => b.classList.remove('active'));
+                // Добавляем active на текущую
+                btn.classList.add('active');
+
+                const lang = btn.dataset.lang;
+
+                // Меняем заголовок и дату
+                title.textContent = title.dataset[lang];
+                dateEl.textContent = dateEl.dataset[lang];
+
+                // Показываем нужный контент
+                ruContent.classList.toggle('active', lang === 'ru');
+                enContent.classList.toggle('active', lang === 'en');
+            });
+        });
+    </script>
+
 </body>
 </html>
