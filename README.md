@@ -2,11 +2,11 @@
 browser extension popout panel emote-picker for chat.
 
 
-![Version](https://img.shields.io/badge/version-0.14.03-blueviolet?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.17.03-blueviolet?style=flat-square)
 ![Manifest](https://img.shields.io/badge/Manifest-V3-blue?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-Chrome%20%2F%20Chromium-yellow?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
-[![Download](https://img.shields.io/badge/Download-v0.14.03-brightgreen?style=flat-square&logo=github)]([https://github.com/ftpobpl47hGTN56/7tv-emotes-steam-chat/releases/download/v1.0.2/1.0.2.steam-chat-7tv-emotes.zip](https://github.com/ftpobpl47hGTN56/7BTVFZ-emote-Picker/archive/refs/tags/0.14.03.zip))
+[![Download](https://img.shields.io/badge/Download-v0.17.03-brightgreen?style=flat-square&logo=github)]([https://github.com/ftpobpl47hGTN56/7tv-emotes-steam-chat/releases/download/v1.0.2/1.0.2.steam-chat-7tv-emotes.zip](https://github.com/ftpobpl47hGTN56/7BTVFZ-emote-Picker/archive/refs/tags/0.17.03.zip))
 
 # 7BTVFZ Emote Picker for Twitch
 **Convenient, fast and beautiful emote picker for 7TV + BTTV + FFZ right in the Twitch chat**
