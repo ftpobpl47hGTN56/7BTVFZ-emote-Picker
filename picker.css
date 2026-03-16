@@ -1,4 +1,37 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+ * {
+    scrollbar-color: auto !important;
+    scrollbar-width: auto !important;
+}
+
+ ::-webkit-scrollbar {
+    width: 23px !important; 
+    background-color: #c1a5ef00 !important; 
+}
+ 
+ ::-webkit-scrollbar-thumb {
+    background-color: #654176  !important; 
+    border-radius: 15px !important;
+    border: 3px solid #a36fb5 !important;
+ }
+
+ ::-webkit-scrollbar-thumb:hover { 
+    background-color: #3a284a !important;
+ }
+
+ ::-webkit-scrollbar-track {
+    background: #22c2c200  !important;
+    border-radius: 18px !important;
+     
+}
+ ::-webkit-scrollbar-corner {
+    background: transparent !important;
+}
 
 :root {
   --bg        : #0e1c1f;
@@ -45,10 +78,11 @@ html, body {
 }
 .logo { font-size: 17px; }
 .header-title {
-  font-weight: 700;
-  font-size: 13px;
-  color: var(--purple);
-  letter-spacing: .3px;
+    font-weight: 700;
+    font-size: 13px;
+    color: #ffe491;
+    letter-spacing: .3px;
+   border-bottom: 1px solid;
 }
 .header-channel {
   margin-left: auto;
@@ -58,6 +92,7 @@ html, body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border-bottom: 1px solid;
 }
 
 /* ── Body layout: sidebar + main ────────────────────────────── */
@@ -146,14 +181,18 @@ html, body {
   padding: 6px 10px;
   border-radius: 4px;
   border: 1px solid var(--gold-dim);
-  background: var(--bg-input);
-  color: var(--teal);
+  background: #0c0c1d;
+  color: #f4e59a;
   font-size: 13px;
   outline: none;
   transition: border-color .15s;
 }
-.search:focus { border-color: var(--purple); }
-.search::placeholder { color: var(--text-muted); }
+.search:focus {
+  border-color: var(--purple); 
+ }
+.search::placeholder {
+  color: var(--text-muted);
+ }
 
 /* ── Grid ───────────────────────────────────────────────────── */
 .grid-wrap {
@@ -172,11 +211,17 @@ html, body {
   scrollbar-width: auto;
   scrollbar-color: #1a505a transparent;
 }
-.grid::-webkit-scrollbar { width: 5px; }
-.grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.grid::-webkit-scrollbar { 
+  width: 5px;
+}
+.grid::-webkit-scrollbar-thumb { 
+  background: var(--border); border-radius: 3px; 
+}
 
 /* ── Emote cell ─────────────────────────────────────────────── */
 .emote {
+   padding:  35px 35px  !important;
+  border: 2px solid #9869b878 !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -189,7 +234,9 @@ html, body {
   transition: background .1s;
   user-select: none;
 }
-.emote:hover { background: rgba(255,255,255,.09); }
+.emote:hover {
+  background: rgb(40 85 97 / 81%); 
+}
 .emote img {
   max-width: 60px;
   max-height: 60px;
@@ -202,12 +249,12 @@ html, body {
 .emote::after {
   content: attr(data-name);
   position: absolute;
-  bottom: calc(100% + 4px);
+  bottom: calc(100% + -95px);
   left: 50%;
   transform: translateX(-50%);
-  background: #392f1b;
+  background: #1b1c39  !important;
   color: #f3edb4;
-  font-size: 11px;
+  font-size: 16px;
   padding: 3px 6px;
   border-radius: 3px;
   white-space: nowrap;
@@ -221,8 +268,9 @@ html, body {
 
 /* ── Favourites highlight ────────────────────────────────────── */
 .emote.is-fav {
-  outline: 1.5px solid rgba(255,213,0,.55);
-  border-radius: 4px;
+  outline: 3px solid rgb(255 222 56 / 47%);
+  border-radius: 1px;
+  background: #ffe14e2b  !important;
 }
 
 /* ── Star badge ─────────────────────────────────────────────── */
@@ -236,8 +284,12 @@ html, body {
   transition: opacity .12s;
   filter: drop-shadow(0 0 2px rgba(0,0,0,.7));
 }
-.emote:hover .fav-badge { opacity: .45; }
-.emote.is-fav .fav-badge { opacity: 1; }
+.emote:hover .fav-badge {
+  opacity: .45; 
+ }
+.emote.is-fav .fav-badge {
+  opacity: 1; 
+ }
 
 /* ── ZW badge ───────────────────────────────────────────────── */
 .zw-badge {
@@ -265,15 +317,21 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 8px; 
   padding: 40px 12px;
   font-size: 13px;
   color: var(--text-alt);
   text-align: center;
   line-height: 1.6;
 }
-.state-msg .icon { font-size: 26px; }
-.state-hint { display: block; margin-top: 4px; font-size: 11px; opacity: .55; }
+.state-msg .icon {
+  font-size: 26px;
+}
+.state-hint {
+  display: block; 
+  margin-top: 4px; font-size: 11px;
+  opacity: .55; 
+}
 
 /* ── Pagination ─────────────────────────────────────────────── */
 .pagination {
@@ -323,8 +381,12 @@ html, body {
   cursor: pointer;
   transition: background .15s;
 }
-.send-btn:hover  { background: #772ce8; }
-.send-btn:active { background: #5c16c5; }
+.send-btn:hover  { 
+  background: #772ce8; 
+ }
+.send-btn:active { 
+  background: #5c16c5; 
+ }
 
 /* ── Chat overlay (injected by content.js) ──────────────────── */
 .sep-emote-wrap {
@@ -341,3 +403,184 @@ html, body {
   top: 50% !important; left: 50% !important;
   transform: translate(-50%, -50%) !important;
 }
+
+
+
+
+/* ═══════ Privacy Button ═══════ */
+.privacy-btn {
+  background: transparent;
+  border: none;
+  color: #8a8ab8;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  margin-left: auto;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: contents;
+}
+
+.privacy-btn:hover {
+  background: rgba(167, 139, 250, 0.1);
+  color: #c9a8f7;
+}
+
+/* ═══════ Privacy Modal ═══════ */
+.privacy-modal {
+  border: 1px solid #2a2a40;
+  border-radius: 12px;
+  background: #1a212e;
+  padding: 0;
+  max-width: 650px;
+  width: 90vw;
+  max-height: 80vh;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  position: relative;
+  top: 50px;
+  left: 135px;
+}
+
+.privacy-modal::backdrop {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+}
+
+.privacy-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.privacy-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid #2a2a40;
+}
+
+.privacy-header h2 {
+  color: #a78bfa;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #8a8ab8;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  background: rgba(167, 139, 250, 0.1);
+  color: #a78bfa;
+}
+
+.lang-switch {
+  text-align: center;
+  padding: 1rem 1.5rem 0.5rem;
+}
+
+.lang-btn {
+  background: #6d28d9;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 0.3rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+  background: #7c3aed;
+  transform: translateY(-1px);
+}
+
+.lang-btn.active {
+  background: #a78bfa;
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.4);
+}
+
+.privacy-body {
+  padding: 1rem 1.5rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.privacy-body p {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: #d0d0e8;
+  line-height: 1.6;
+}
+
+.privacy-body .highlight {
+  color: #c4b5fd;
+  font-weight: 500;
+}
+
+.privacy-body strong {
+  color: #e0e0ff;
+  font-weight: 600;
+}
+
+.privacy-body code {
+  background: #0d0d1a;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Consolas', monospace;
+  font-size: 0.9em;
+}
+
+.content-ru, .content-en {
+  display: none;
+}
+
+.content-ru.active, .content-en.active {
+  display: block;
+}
+
+
+
+/* ── Twemoji Support ────────────────────────────────────────────── */
+.twemoji {
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
+  display: inline-block;
+  object-fit: contain;
+}
+
+.emoji-btn .twemoji {
+  width: 28px;
+  height: 28px;
+}
+button.emoji-btn {
+    background: rgb(250 255 215 / 22%) !important;
+}
+.emoji-category-header:hover {
+  background: var(--color-background-button-secondary-hover, rgba(76, 119, 111, 0.372));
+}
+.emoji-category-header {
+    background: #352b40;
+    color: #d1c598 !important;
+    border-radius: 15px;
+    font-size: 16px !important;
+    border-bottom: 1px solid #44c3b2 !important;
+}
+ 

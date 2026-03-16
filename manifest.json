@@ -1,18 +1,19 @@
 {
   "manifest_version": 3,
   "name": "7BTVFZ Emote Picker [Twitch] ",
-  "version": "0.14.03",
+  "version": "0.17.03",
   "description": "Custom emote picker for Twitch chat: 7TV, BTTV, FFZ",
    "icons": {
-    "48": "assets/bttn-53335hdtndtntdntd.png",
-    "64": "assets/bttn-53335hdtndtntdntd.png",
-    "128": "assets/bttn-53335hdtndtntdntd.png"
+    "48": "assets/48tjtfjtfjjtf5665.png",
+    "64": "assets/64tjtfjtfjjtf5665.png", 
+    "128": "assets/128tjtfjtfjjtf5665.png",
+    "256": "assets/256tjtfjtfjjtf5665.png"
   },
   "permissions": [
-    "activeTab",
-    "tabs",
-     "webNavigation",
-    "storage"
+      "activeTab",
+      "tabs",
+      "webNavigation",
+      "storage"
   ],
   "host_permissions": [
       "https://www.twitch.tv/*", 
@@ -60,7 +61,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "picker.html",
+        "picker.html", 
         "picker.js",
         "picker.css",
          "chat/*",
