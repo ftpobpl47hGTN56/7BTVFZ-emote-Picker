@@ -46,7 +46,6 @@ A modern alternative to the default Twitch picker and the FrankerFaceZ extension
  
 
 
-##  UI 
-<img width="894" height="724" alt="image" src=" https://raw.githubusercontent.com/ftpobpl47hGTN56/7BTVFZ-emote-Picker/refs/heads/main/assets/tftfjjftjft-4e64ejhtdf-ntfntf.png" />
+ 
  
  
