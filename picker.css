@@ -264,7 +264,9 @@ html, body {
   z-index: 100;
   border: 1px solid var(--gold-dim);
 }
-.emote:hover::after { opacity: 1; }
+.emote:hover::after {
+   opacity: 1;
+ }
 
 /* ── Favourites highlight ────────────────────────────────────── */
 .emote.is-fav {
@@ -370,10 +372,11 @@ html, body {
   text-align: center;
 }
 .send-btn {
+  height: 32px !important;
   margin-left: auto;
   padding: 4px 14px;
-  background: #9147ff;
-  color: #fff;
+  background: #c59616;
+  color: #211903;
   border: none;
   border-radius: 6px;
   font-size: 13px;
@@ -382,10 +385,12 @@ html, body {
   transition: background .15s;
 }
 .send-btn:hover  { 
-  background: #772ce8; 
+  background: #3b1871; 
+  color: #dbc5e9;
  }
 .send-btn:active { 
-  background: #5c16c5; 
+  background: #1f5864; 
+   color: #c5e9e3;
  }
 
 /* ── Chat overlay (injected by content.js) ──────────────────── */

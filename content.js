@@ -9,7 +9,7 @@
   'use strict';
 
   // ─── Config ──────────────────────────────────────────────────────────────────
-  const PAGE_SIZE = 60;
+  const PAGE_SIZE =  550; // 1000; 950; 480; 550; 120; 320; 300; 250; 650; 850;
   const CDN_7TV   = 'https://cdn.7tv.app/emote/';
   const CDN_BTTV  = 'https://cdn.betterttv.net/emote/';
   const CDN_FFZ   = 'https://cdn.frankerfacez.com/emote/';
@@ -57,7 +57,8 @@
     z-index: 190555 !important;
   }
   .emote { user-select: none !important; }
-  div#nameEl-sep-emote-47654jr6ug { user-select: text !important; font-size: 14px !important; overflow-wrap: break-word !important; }
+  div#nameEl-sep-emote-47654jr6ug { user-select: text !important; 
+  font-size: 14px !important; overflow-wrap: break-word !important; }
   #copyBtn-txtmt-4nrd5e:hover, #pasteBtn-popemt-4nrd5e:hover,
   #sendemt-in-chat-4nrd5e:hover, #close-popemts-4nrd5e:hover,
   #see-emotlink-onsvntvapp-4nrd5e:hover {
@@ -305,7 +306,7 @@
     const q = state.query.toLowerCase();
     return list.filter(e => e.name.toLowerCase().includes(q));
   }
-
+ // ─── UI render Panel picker (mini inline ) ──────────────────────────────────────────────
   function renderGrid(panel) {
     const grid      = panel.querySelector('.sep-grid');
     const prevBtn   = panel.querySelector('#sep-prev');
@@ -642,7 +643,7 @@
   }
   span.textContent = '';
   span.appendChild(frag);
-}
+  }
 
   function renderChatLine(line) {
     line.querySelectorAll('.text-fragment[data-a-target="chat-message-text"]:not([data-sep-rendered])')
