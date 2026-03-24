@@ -570,7 +570,7 @@ function toggleEmojiCategory(categoryName) {
 
 // ── State ────────────────────────────────────────────────────────────────────
 const state = {
-  activeTab   : 'emoji', //  'emoji',  'favs', 
+  activeTab   : 'favs', //  'emoji',  'favs', 
   page        : 0,
   query       : '',
   emotesByTab : {
