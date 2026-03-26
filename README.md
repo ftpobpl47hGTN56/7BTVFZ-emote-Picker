@@ -9,7 +9,7 @@ browser extension popout panel emote-picker for chat.
 ![Platform](https://img.shields.io/badge/platform-Chrome%20%2F%20Chromium-yellow?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
-[![Download](https://img.shields.io/badge/Download-v1.2403.2026-brightgreen?style=flat-square&logo=github)](https://github.com/ftpobpl47hGTN56/7BTVFZ-emote-Picker/releases/download/v1.2603.2026-tooltip-bttv/v1.2603_7BTVFZ_Emote_picker.zip)
+[![Download](https://img.shields.io/badge/Download-v1.2603.2026-brightgreen?style=flat-square&logo=github)](https://github.com/ftpobpl47hGTN56/7BTVFZ-emote-Picker/releases/download/v1.2603.2026-tooltip-bttv/v1.2603_7BTVFZ_Emote_picker.zip)
 
 
 # 7BTVFZ Emote Picker for Twitch
