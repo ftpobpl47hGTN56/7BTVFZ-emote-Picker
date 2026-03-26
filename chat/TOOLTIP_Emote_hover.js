@@ -127,10 +127,9 @@
 
     // Базовый объект — заполняется данными из img-атрибутов
     const result = {
-      name:       img.alt || img.title || 'Unknown',
+      name:   img.alt || img.title || 'Unknown',
       platform,
-      author:     '—',
-      previewSrc: getBestPreviewSrc(img),
+      author: '—',
     };
 
     try {
@@ -206,69 +205,82 @@
    * Заполняет и показывает тултип с переданными данными.
    * @param {Object} data
    */
-  function renderTooltip(data) {
-    const platformColor = PLATFORM_COLORS[data.platform] || PLATFORM_COLORS.Unknown;
+  /**
+ * Заполняет тултип: клонирует оригинальную картинку + показывает данные
+ */
+function renderTooltip(img, data) {
+  const platformColor = PLATFORM_COLORS[data.platform] || PLATFORM_COLORS.Unknown;
 
-    tooltip.innerHTML = `
-      <div style="
-        text-align: center;
-        margin-bottom: 10px;
-        background:rgb(39, 52, 51);
-        border-radius: 6px;
-        padding: 8px;
-      ">
-        <img
-          src="${data.previewSrc}"
-          alt="${data.name}"
-          style="
-            max-width: 112px;
-            max-height: 112px;
-            display: inline-block;
-            image-rendering: auto;
-            vertical-align: middle;
-          "
-        />
-      </div>
+  // Клонируем оригинальную картинку из чата
+  const clone = img.cloneNode(true);
+  Object.assign(clone.style, {
+    maxWidth:  '112px',
+    maxHeight: '112px',
+    display:   'inline-block',
+    imageRendering: 'auto',
+    verticalAlign:  'middle'
+  });
 
-      <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px; word-break: break-all;">
-        ${data.name}
-      </div>
+  tooltip.innerHTML = `
+    <div style="
+      text-align: center;
+      margin-bottom: 10px;
+      background:rgb(39, 52, 51);
+      border-radius: 6px;
+      padding: 8px;
+    ">
+    </div>
 
-      <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-        <span style="color: #adadb8; min-width: 58px;">platform</span>
-        <span style="
-          background: ${platformColor}22;
-          color: ${platformColor};
-          font-weight: 600;
-          border-radius: 4px;
-          padding: 1px 7px;
-          font-size: 12px;
-        ">${data.platform}</span>
-      </div>
+    <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px; word-break: break-all;">
+      ${data.name}
+    </div>
 
-      <div style="display: flex; align-items: center; gap: 6px;">
-        <span style="color: #adadb8; min-width: 58px;">author</span>
-        <span style="color: #efeff1; font-weight: 500;">${data.author}</span>
-      </div>
-    `;
-  }
+    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+      <span style="color: #adadb8; min-width: 58px;">platform</span>
+      <span style="
+        background: ${platformColor}22;
+        color: ${platformColor};
+        font-weight: 600;
+        border-radius: 4px;
+        padding: 1px 7px;
+        font-size: 12px;
+      ">${data.platform}</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 6px;">
+      <span style="color: #adadb8; min-width: 58px;">author</span>
+      <span style="color: #efeff1; font-weight: 500;">${data.author}</span>
+    </div>
+  `;
+
+  // Вставляем клонированную картинку в первый div
+  tooltip.querySelector('div').appendChild(clone);
+}
 
   /**
    * Показывает «Загрузка...» пока данные ещё не пришли.
    * @param {HTMLImageElement} img — для показа превью
    */
-  function renderLoading(img) {
-    const previewSrc = getBestPreviewSrc(img);
-    tooltip.innerHTML = `
-      <div style="text-align:center; padding:8px 4px; color:#adadb8; font-size:12px;">
-        <img
-          src="${previewSrc}"
-          style="max-width:64px; max-height:64px; display:block; margin:0 auto 6px;"
-        />
-        Загрузка…
-      </div>
-    `;
-  }
+  /**
+ * Показывает «Загрузка…» с клонированной оригинальной картинкой
+ */
+function renderLoading(img) {
+  const clone = img.cloneNode(true);
+  Object.assign(clone.style, {
+    maxWidth:  '64px',
+    maxHeight: '64px',
+    display:   'block',
+    margin:    '0 auto 6px',
+  });
+
+  tooltip.innerHTML = `
+    <div style="text-align:center; padding:8px 4px; color:#adadb8; font-size:12px;">
+    </div>
+  `;
+  const container = tooltip.firstElementChild;
+  container.appendChild(clone);
+  container.append('Загрузка…');
+}
 
   // ─── Позиционирование ────────────────────────────────────────
 
@@ -361,19 +373,18 @@
     clearTimeout(hideTimer);
     clearTimeout(showTimer);
 
-    showTimer = setTimeout(async () => {
+      showTimer = setTimeout(async () => {
       activeImg = img;
 
-      renderLoading(img);
+      renderLoading(img);                    // ← передаём img
       showTooltip();
       positionTooltip(e.clientX, e.clientY);
 
       const data = await fetchEmoteData(img);
 
-      // Если курсор уже ушёл с этого img — не обновляем
       if (activeImg !== img) return;
 
-      renderTooltip(data);
+      renderTooltip(img, data);              // ← теперь передаём img + data
       positionTooltip(e.clientX, e.clientY);
     }, CFG.showDelay);
 
