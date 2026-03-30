@@ -395,20 +395,22 @@ html, body {
 
 /* ── Chat overlay (injected by content.js) ──────────────────── */
 .sep-emote-wrap {
-  display: inline-block;
-  position: relative;
-  vertical-align: middle;
-  line-height: 0;
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+      line-height: 0;
+      /* ← ДОБАВЬ: Чтобы соседние эмоты не наложились */
+      margin-right: 4px;
+  }
+.sep-emote-wrap .sep-emote-base {
+   display: block; 
+   position: relative; 
+   z-index: 0;
+ }
+ .sep-emote-wrap:has(.sep-mod-wide) {
+    margin-left: 150px !important;
 }
-.sep-emote-wrap .sep-emote-base { display: block; position: relative; z-index: 0; }
-.sep-emote-overlay {
-  position: absolute !important;
-  pointer-events: none !important;
-  margin: 0 !important;
-  top: 50% !important; left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-}
-
+ 
 
 
 

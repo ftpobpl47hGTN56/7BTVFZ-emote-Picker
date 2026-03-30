@@ -10,7 +10,7 @@
     
   // ─── Config ─────────────────────────────────────────────────────────────────
   const WEBSOCKET_URL = 'wss://events.7tv.io/v3';
-  const RECONNECT_DELAY = 5000; // 5 секунд
+  const RECONNECT_DELAY = 1000; // 5 секунд
   const HEARTBEAT_INTERVAL = 30000; // 30 секунд
 
   // ─── State ──────────────────────────────────────────────────────────────────
@@ -137,7 +137,7 @@
         border-right: solid 4px !important;
         margin: 6px 0 !important;
         padding: 5px 8px !important;
-        background: rgba(30, 30, 50, 0.65) !important;
+        background: rgb(4, 39, 70) !important;
         border-radius: 4px !important;
     }
 
@@ -418,7 +418,7 @@
         cleanup();
         initForChannel(ch);
       }
-    }, 2000);
+    }, 1000);
   }
 
   // ─── Cleanup on page unload ──────────────────────────────────────────────────

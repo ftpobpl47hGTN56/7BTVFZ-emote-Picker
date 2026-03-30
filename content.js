@@ -1,5 +1,6 @@
+
 // ============================================================
-//  Twitch 7TV Emote Picker — content.js (DEBUG VERSION)
+// content.js  — Twitch 7TV Emote Picker(DEBUG VERSION)
 //  ✓ Split tabs: bttv-ch / bttv-gl / ffz-ch / ffz-gl / 7tv-ch / 7tv-gl
 //  ✓ Auto-refreshes when emotes are added/removed
 //  ✓ Detailed logging for debugging
@@ -19,56 +20,153 @@
   const STYLE_ID  = 'sep-emote-style';
 
   // ─── CSS ─────────────────────────────────────────────────────────────────────
-  function injectStyle() {
+   function injectStyle() {
     if (document.getElementById(STYLE_ID)) return;
     const s = document.createElement('style');
     s.id = STYLE_ID;
     s.textContent = `
-  #${BTN_ID} {
-    display: flex; align-items: center; justify-content: center;
-    width: 95px; height: 34px; border: none; border-radius: 4px;
-    background: transparent; cursor: pointer; font-size: 20px;
-    line-height: 1; color: var(--color-text-button-secondary-default, #efeff1);
-    transition: background 0.15s; flex-shrink: 0;
+    #${BTN_ID} {
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      width: 95px; 
+      height: 34px; 
+      border: none; 
+      border-radius: 4px;
+      background: transparent; 
+      cursor: pointer; 
+      font-size: 20px;
+      line-height: 1; 
+      color: var(--color-text-button-secondary-default, #efeff1);
+      transition: background 0.15s; flex-shrink: 0;
+    }
+    #${BTN_ID}:hover {
+      background: var(--color-background-button-secondary-hover, rgba(255,255,255,.1));
+    }
+    #${PANEL_ID} {
+      position: fixed; bottom: 56px; right: 340px;
+      width: 340px; height: 420px; display: flex; flex-direction: column;
+      background: var(--color-background-base, #18181b);
+      border: 1px solid var(--color-border-base, #3a3a3d);
+      border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,.6);
+      z-index: 9000; font-family: Inter, Roobert, sans-serif;
+      user-select: none; overflow: hidden;
+    }
+    #${PANEL_ID}.sep-hidden { display: none !important; 
   }
-  #${BTN_ID}:hover {
-    background: var(--color-background-button-secondary-hover, rgba(255,255,255,.1));
-  }
-  #${PANEL_ID} {
-    position: fixed; bottom: 56px; right: 340px;
-    width: 340px; height: 420px; display: flex; flex-direction: column;
-    background: var(--color-background-base, #18181b);
-    border: 1px solid var(--color-border-base, #3a3a3d);
-    border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,.6);
-    z-index: 9000; font-family: Inter, Roobert, sans-serif;
-    user-select: none; overflow: hidden;
-  }
-  #${PANEL_ID}.sep-hidden { display: none !important; }
-  .sep-emote-wrap {
-    display: inline-block; position: relative;
-    line-height: 0; vertical-align: middle;
-  }
-  .sep-emote-wrap .sep-emote-base { display: block; position: relative; z-index: 0; }
-  .sep-chat-emote { vertical-align: middle; max-height: 28px; display: inline-block; }
   .sep-emote-overlay {
-    position: absolute !important; pointer-events: none !important;
-    margin: 0 !important; top: 50% !important; left: 50% !important;
-    transform: translate(-50%, -50%) !important; max-height: 28px;
-    z-index: 190555 !important;
+        position: absolute !important;
+        pointer-events: none !important;
+        top: 50% !important;
+        left:  50% !important;
+        transform: translate(-50%, -50%) 
+                  scaleX(var(--sep-scale-x, 1)) 
+                  scaleY(var(--sep-scale-y, 1)) 
+                  rotate(var(--sep-rotate, 0deg)) !important;
+        z-index: 1;
+        /* Убираем любые max-height/width от sep-chat-emote для оверлеев */
+        max-height: none !important;
+        height: auto !important;
+        width: auto !important;
+    }
+
+  /* Если нужно сохранить масштабирование по чату — добавляем отдельно */
+  .sep-emote-base {
+        max-height: 28px;
+        height: auto;
+        width: auto;
+        display: block;
+    }
+
+    .sep-emote-wrap .sep-emote-base {
+        display: block; 
+        position: relative; 
+        z-index: 0;
+      }
+    .sep-chat-emote {
+        vertical-align: middle; 
+        max-height: 28px; 
+        display: inline-block;
+      }
+    .sep-emote-wrap {
+        display: inline-block;
+        position: relative;
+        line-height: 0;
+        vertical-align: middle;
+        
+    }
+    .sep-emote-wrap {
+      display: inline-block;
+      position: relative;
+      line-height: 0;
+      vertical-align: middle;
+  } 
+
+/* Удаляем специальные случаи data-wide-emote — они больше не нужны */    
+    .emote {
+       user-select: none !important;
+    }
+    div#nameEl-sep-emote-47654jr6ug { user-select: text !important; 
+       font-size: 14px !important; overflow-wrap: break-word !important; 
+    }
+    #copyBtn-txtmt-4nrd5e:hover, #pasteBtn-popemt-4nrd5e:hover,
+    #sendemt-in-chat-4nrd5e:hover, #close-popemts-4nrd5e:hover,
+    #see-emotlink-onsvntvapp-4nrd5e:hover {
+        color: rgb(217 231 157 / 90%) !important; 
+        cursor: pointer !important;
+        font-size: 15px !important; 
+        background: rgba(19,71,49,.66) !important;
+        border-width: 2px !important; 
+        border: solid !important; 
+        border-radius: 11px !important;
+    }
+      /* Базовый стиль для наложения (Zero-Width) */
+  .zero-width-emote {
+      position: absolute;
+      margin-left: -32px; /* Подстройте под размер ваших эмотов */
+      pointer-events: none;
   }
-  .emote { user-select: none !important; }
-  div#nameEl-sep-emote-47654jr6ug { user-select: text !important; 
-  font-size: 14px !important; overflow-wrap: break-word !important; }
-  #copyBtn-txtmt-4nrd5e:hover, #pasteBtn-popemt-4nrd5e:hover,
-  #sendemt-in-chat-4nrd5e:hover, #close-popemts-4nrd5e:hover,
-  #see-emotlink-onsvntvapp-4nrd5e:hover {
-    color: rgb(217 231 157 / 90%) !important; cursor: pointer !important;
-    font-size: 15px !important; background: rgba(19,71,49,.66) !important;
-    border-width: 2px !important; border: solid !important; border-radius: 11px !important;
+
+  /* BTTV Modifiers */
+  .mod-s { animation: emote-shake 0.2s infinite; }
+  .mod-p { animation: emote-pulse 0.5s infinite; }
+  .mod-c { filter: grayscale(1) contrast(2); }
+  .mod-h, .mod-ffzx { transform: scaleX(-1); }
+  .mod-v, .mod-ffzy { transform: scaleY(-1); }
+  .mod-l { transform: rotate(-90deg); }
+  .mod-r { transform: rotate(90deg); }
+
+  /* FFZ Modifiers */
+  .mod-ffzspin { animation: emote-spin 2s linear infinite; }
+  .mod-ffzrainbow { animation: emote-rainbow 3s linear infinite; }
+  .mod-ffzjam { animation: emote-jam 0.8s infinite; }
+  .mod-ffzcursed { filter: invert(1) contrast(200%) brightness(150%); }
+
+  /* Анимации */
+  @keyframes emote-shake {
+      0% { transform: translate(1px, 1px); }
+      50% { transform: translate(-1px, -1px); }
+      100% { transform: translate(1px, -1px); }
   }
-    `;
-    document.head.appendChild(s);
+
+  @keyframes emote-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
   }
+
+  @keyframes emote-rainbow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+  }
+
+  @keyframes emote-jam {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(5px) skewX(10deg); }
+  }
+      `;
+      document.head.appendChild(s);
+    }
+
 
   // ─── Utility ─────────────────────────────────────────────────────────────────
   function waitFor(selector, timeout = 15000) {
@@ -570,86 +668,333 @@
     return img;
   }
 
-  function renderTextFragment(span) {
-  if (span.hasAttribute(RENDERED_ATTR)) return;
-
-  const text  = span.textContent;
-  const parts = text.split(/(\s+)/);
-
-  // ── Проверяем СНАЧАЛА — помечаем ТОЛЬКО если есть эмоуты ──────────────────
-  let hasEmote = false;
-  for (const p of parts) {
-    if (emoteMap.has(p)) { hasEmote = true; break; }
-  }
-  if (!hasEmote) return; // ← выходим БЕЗ атрибута — спан будет проверен снова
-
-  span.setAttribute(RENDERED_ATTR, '4'); // ← только для спанов с реальными эмоутами
-
-  const nodes = [], orphanOverlays = [];
-  for (const part of parts) {
-    const e = emoteMap.get(part);
-    if (!e) { nodes.push({ type: 'text', value: part }); continue; }
-    if (e.zeroWidth) {
-      let base = null;
-      for (let i = nodes.length - 1; i >= 0; i--) {
-        if (nodes[i].type === 'emote') { base = nodes[i]; break; }
-      }
-      if (base) { base.overlays.push({ name: part, emote: e }); continue; }
-      orphanOverlays.push({ name: part, emote: e }); continue;
-    }
-    nodes.push({ type: 'emote', name: part, emote: e, overlays: [] });
-  }
-
-  if (orphanOverlays.length) {
-    const prev = span.previousElementSibling;
-    if (prev) {
-      const prevImg = prev.tagName === 'IMG' ? prev : prev.querySelector('img');
-      if (prevImg) {
-        const wrap = document.createElement('span');
-        wrap.className = 'sep-emote-wrap';
-        prev.parentNode.insertBefore(wrap, prev);
-        wrap.appendChild(prev);
-        prevImg.classList.add('sep-emote-base');
-        orphanOverlays.forEach(ov => {
-          const ovImg = makeEmoteImg(ov.name, ov.emote);
-          ovImg.classList.remove('sep-chat-emote');
-          ovImg.classList.add('sep-emote-overlay');
-          wrap.appendChild(ovImg);
-        });
-        return; // orphans прикреплены к предыдущему элементу
-      }
-    }
-    orphanOverlays.forEach(ov =>
-      nodes.push({ type: 'emote', name: ov.name, emote: ov.emote, overlays: [] })
-    );
-  }
-
-  const frag = document.createDocumentFragment();
-  for (const node of nodes) {
-    if (node.type === 'text') { frag.appendChild(document.createTextNode(node.value)); continue; }
-    if (!node.overlays.length) { frag.appendChild(makeEmoteImg(node.name, node.emote)); continue; }
-    const wrap = document.createElement('span');
-    wrap.className = 'sep-emote-wrap';
-    const baseImg = makeEmoteImg(node.name, node.emote);
-    baseImg.classList.add('sep-emote-base');
-    wrap.appendChild(baseImg);
-    node.overlays.forEach(ov => {
-      const ovImg = makeEmoteImg(ov.name, ov.emote);
-      ovImg.classList.remove('sep-chat-emote');
-      ovImg.classList.add('sep-emote-overlay');
-      wrap.appendChild(ovImg);
-    });
-    frag.appendChild(wrap);
-  }
-  span.textContent = '';
-  span.appendChild(frag);
-  }
-
+  // ─── ОСНОВНАЯ ФУНКЦИЯ: обработка полного сообщения ───────────────────────────
   function renderChatLine(line) {
-    line.querySelectorAll('.text-fragment[data-a-target="chat-message-text"]:not([data-sep-rendered])')
-        .forEach(renderTextFragment);
+      // 1️⃣ Находим все .text-fragment'ы (они содержат 7TV эмоты и ZW модификаторы)
+      const fragments = line.querySelectorAll('.text-fragment[data-a-target="chat-message-text"]:not([data-sep-rendered])');
+      
+      fragments.forEach(fragment => {
+          // 2️⃣ Находим ближайший ПРЕДЫДУЩИЙ Twitch эмоут (если он есть)
+          let twitchEmoteDiv = null;
+          let prevElement = fragment.previousElementSibling;
+          
+          while (prevElement) {
+              // Проверяем, это ли div с Twitch эмотом
+              if (prevElement.classList.contains('ffz--inline')) {
+                  const twitchImg = prevElement.querySelector('img.twitch-emote');
+                  if (twitchImg) {
+                      twitchEmoteDiv = prevElement;
+                      break;
+                  }
+              }
+              prevElement = prevElement.previousElementSibling;
+          }
+          
+          // 3️⃣ Обрабатываем текстовый фрагмент (7TV эмоты + ZW + модификаторы)
+          const twitchImgClone = twitchEmoteDiv ? 
+              twitchEmoteDiv.querySelector('img.twitch-emote').cloneNode(true) : 
+              null;
+          
+          renderTextFragment(fragment, twitchImgClone, twitchEmoteDiv);
+      });
   }
 
+  // ─── Определение размера эмота и добавление дата-атрибутов ────────────────
+  // ─── Определение размера и точное центрирование оверлеев ────────────────
+function applyEmoteAspectRatio(wrap) {
+    if (!wrap || wrap.hasAttribute('data-sep-aspect-checked')) return;
+
+    const baseImg = wrap.querySelector('.sep-emote-base');
+    if (!baseImg) return;
+
+    const overlays = Array.from(wrap.querySelectorAll('.sep-emote-overlay'));
+
+    const centerOverlays = () => {
+        // Натуральные размеры базового эмоута (учитываем реальное изображение)
+        const baseNaturalW = baseImg.naturalWidth || baseImg.width || 28;
+        const baseNaturalH = baseImg.naturalHeight || baseImg.height || 28;
+
+        // Для каждого оверлея вычисляем его собственный размер
+        overlays.forEach(ovImg => {
+            const ovNaturalW = ovImg.naturalWidth || ovImg.width || 28;
+            const ovNaturalH = ovImg.naturalHeight || ovImg.height || 28;
+
+            // Смещение, чтобы центрировать оверлей относительно базового
+            // (учитываем разницу в размерах)
+            const offsetX = (baseNaturalW - ovNaturalW) / 2;
+            const offsetY = (baseNaturalH - ovNaturalH) / 2;
+
+            // Применяем точное смещение поверх translate(-50%, -50%)
+            ovImg.style.setProperty('--sep-overlay-offset-x', `${offsetX}px`, 'important');
+            ovImg.style.setProperty('--sep-overlay-offset-y', `${offsetY}px`, 'important');
+
+            // Дополнительно можно добавить data-атрибуты для отладки
+            wrap.setAttribute('data-base-width', baseNaturalW);
+            wrap.setAttribute('data-base-height', baseNaturalH);
+        });
+    };
+
+    // Если изображения уже загружены
+    if (baseImg.complete && baseImg.naturalWidth > 0) {
+        centerOverlays();
+    } else {
+        baseImg.addEventListener('load', centerOverlays, { once: true });
+    }
+
+    // Ждём загрузки оверлеев (на случай, если они грузятся позже)
+    overlays.forEach(ov => {
+        if (ov.complete && ov.naturalWidth > 0) {
+            centerOverlays();
+        } else {
+            ov.addEventListener('load', centerOverlays, { once: true });
+        }
+    });
+
+    wrap.setAttribute('data-sep-aspect-checked', '1');
+}
+
+
+
+    // ─── POST-PROCESSING ДЛЯ FFZ + 7TV ZW ─────────────────────────────────────
+  // ─── УЛУЧШЕННЫЙ POST-PROCESSING ДЛЯ FFZ + 7TV (ZW и обычные) ───────────────
+  function processFFZCompatibility(messageElement) {
+      if (!messageElement) return;
+
+      let children = Array.from(messageElement.children);
+
+      for (let i = 0; i < children.length; i++) {
+          const current = children[i];
+
+          // 1. Нашли FFZ-элемент
+          if (!current.classList.contains('ffz--inline')) continue;
+
+          const ffzImg = current.querySelector('img.ffz-emote, img.ffz-emoji');
+          if (!ffzImg) continue;
+
+          // 2. Ищем следующий 7TV (может быть внутри text-fragment)
+          let nextWrap = null;
+          let nextTextFragment = null;
+
+          const nextChild = children[i + 1];
+
+          if (nextChild?.classList.contains('text-fragment')) {
+              nextTextFragment = nextChild;
+              nextWrap = nextChild.querySelector('.sep-emote-wrap');
+          } else if (nextChild?.classList.contains('sep-emote-wrap')) {
+              nextWrap = nextChild;
+          }
+
+          if (!nextWrap) continue;
+
+          // 3. Оборачиваем FFZ в sep-emote-wrap (если ещё нет)
+          let wrap = current.closest('.sep-emote-wrap');
+          if (!wrap) {
+              wrap = document.createElement('span');
+              wrap.className = 'sep-emote-wrap';
+              current.parentNode.insertBefore(wrap, current);
+              wrap.appendChild(current);
+          }
+
+          // 4. Делаем FFZ базовым
+          ffzImg.classList.add('sep-emote-base');
+
+          // 5. Все картинки из 7TV-wrap превращаем в оверлеи
+          const sevenTvImages = Array.from(nextWrap.querySelectorAll('img'));
+          sevenTvImages.forEach(img => {
+              img.classList.remove('sep-emote-base', 'sep-chat-emote');
+              img.classList.add('sep-emote-overlay', 'chat-image');
+              wrap.appendChild(img);
+          });
+
+          // 6. Удаляем старый 7TV-контейнер
+          if (nextTextFragment) {
+              nextTextFragment.remove();
+          } else {
+              nextWrap.remove();
+          }
+                      // После всех манипуляций с wrap
+          applyEmoteAspectRatio(wrap);
+          // Обновляем список детей (чтобы правильно обработать следующий FFZ)
+          children = Array.from(messageElement.children);
+          i++; // пропускаем уже обработанный элемент
+      }
+  }
+
+    // ─── МОДИФИЦИРОВАННАЯ renderTextFragment ───────────────────────────────────
+  function renderTextFragment(span, twitchImgClone = null, twitchEmoteDiv = null) {
+      if (span.hasAttribute(RENDERED_ATTR)) return;
+
+      const text = span.textContent;
+      const parts = text.split(/(\s+)/);
+
+      let hasEmoteOrMod = false;
+      for (const p of parts) {
+          if (emoteMap.has(p) || window.EmoteModifiers?.isModifier(p)) {
+              hasEmoteOrMod = true;
+              break;
+          }
+      }
+
+      if (!hasEmoteOrMod && !twitchImgClone) return;
+
+      span.setAttribute(RENDERED_ATTR, '4');
+      if (window.EmoteModifiers) window.EmoteModifiers.injectStyles();
+
+      const nodes = [];
+
+      // ПЕРВЫЙ ПРОХОД: разбираем текст
+      for (const part of parts) {
+          if (part.trim() === '') {
+              nodes.push({ type: 'text', value: part });
+              continue;
+          }
+          const e = emoteMap.get(part);
+          const isMod = window.EmoteModifiers?.isModifier(part);
+
+          if (!e && !isMod) {
+              nodes.push({ type: 'text', value: part });
+              continue;
+          }
+
+          if (isMod) {
+              if (part === 'z!' || part === 'Z') {
+                  // Z-логика остаётся (присоединяет ZW только к 7TV-эмотам)
+                  let currentEmoteIdx = -1;
+                  let targetEmoteIdx = -1;
+                  for (let i = nodes.length - 1; i >= 0; i--) {
+                      if (nodes[i].type === 'emote' || nodes[i].type === 'zw-temp') {
+                          if (currentEmoteIdx === -1) currentEmoteIdx = i;
+                          else { targetEmoteIdx = i; break; }
+                      }
+                  }
+                  if (currentEmoteIdx !== -1 && targetEmoteIdx !== -1) {
+                      const current = nodes[currentEmoteIdx];
+                      const target = nodes[targetEmoteIdx];
+                      if (current.type === 'zw-temp') {
+                          target.overlays.push({ name: current.name, emote: current.emote, modClasses: current.modClasses, isZW: true });
+                      } else if (current.type === 'emote') {
+                          target.overlays.push({ name: current.name, emote: current.emote, modClasses: current.modClasses, isZW: false });
+                      }
+                      nodes.splice(currentEmoteIdx, 1);
+                  }
+                  continue;
+              }
+
+              const modClass = window.EmoteModifiers.getModifierClass(part);
+              for (let i = nodes.length - 1; i >= 0; i--) {
+                  if (nodes[i].type === 'emote' || nodes[i].type === 'zw-temp') {
+                      nodes[i].modClasses.push(modClass);
+                      break;
+                  }
+              }
+              continue;
+          }
+
+          // 7TV-эмот
+          if (e.zeroWidth) {
+              nodes.push({ type: 'zw-temp', name: part, emote: e, modClasses: [] });
+          } else {
+              nodes.push({ type: 'emote', name: part, emote: e, overlays: [], modClasses: [] });
+          }
+      }
+
+      // ВТОРОЙ ПРОХОД: ZW-логика (только для 7TV)
+      const finalNodes = [];
+      for (let i = 0; i < nodes.length; i++) {
+          const node = nodes[i];
+          if (node.type === 'zw-temp') {
+              let found = false;
+              for (let j = finalNodes.length - 1; j >= 0; j--) {
+                  if (finalNodes[j].type === 'emote') {
+                      finalNodes[j].overlays.push({
+                          name: node.name,
+                          emote: node.emote,
+                          modClasses: node.modClasses,
+                          isZW: true
+                      });
+                      found = true;
+                      break;
+                  }
+              }
+              if (!found) {
+                  finalNodes.push({
+                      type: 'emote',
+                      name: node.name,
+                      emote: node.emote,
+                      overlays: [],
+                      modClasses: node.modClasses,
+                      isZW: true
+                  });
+              }
+          } else {
+              finalNodes.push(node);
+          }
+      }
+
+      // ТРЕТИЙ ПРОХОД: рендеринг (БЕЗ объединения Twitch + 7TV)
+      const frag = document.createDocumentFragment();
+
+      // 1. Сначала рендерим Twitch отдельно (если он есть)
+      if (twitchImgClone) {
+          const twitchWrap = document.createElement('span');
+          twitchWrap.className = 'sep-emote-wrap';
+
+          const twitchImg = twitchImgClone.cloneNode(true);
+          twitchImg.className = 'twitch-emote sep-emote-base chat-image chat-line__message--emote ffz--pointer-events ffz-tooltip';
+
+          twitchWrap.appendChild(twitchImg);
+          frag.appendChild(twitchWrap);
+
+          // Удаляем оригинальный Twitch-дивизий FFZ
+          if (twitchEmoteDiv) twitchEmoteDiv.remove();
+      }
+
+      // 2. Рендерим все 7TV-эмоты отдельно (оверлеи только между собой)
+      for (const node of finalNodes) {
+          if (node.type === 'text') {
+              frag.appendChild(document.createTextNode(node.value));
+              continue;
+          }
+
+          const wrap = document.createElement('span');
+          wrap.className = 'sep-emote-wrap';
+
+          const baseImg = makeEmoteImg(node.name, node.emote);
+          baseImg.classList.add('sep-emote-base');
+
+          if (node.modClasses && node.modClasses.length > 0) {
+              node.modClasses.forEach(cls => baseImg.classList.add(cls));
+          }
+
+          wrap.appendChild(baseImg);
+          applyEmoteAspectRatio(wrap); 
+
+          node.overlays.forEach(ov => {
+              const ovImg = makeEmoteImg(ov.name, ov.emote);
+              ovImg.className = 'sep-emote-overlay chat-image';
+              if (ov.modClasses && ov.modClasses.length > 0) {
+                  ov.modClasses.forEach(cls => ovImg.classList.add(cls));
+              }
+              wrap.appendChild(ovImg);
+          });
+
+          frag.appendChild(wrap);
+      }
+
+      span.textContent = '';
+      span.appendChild(frag);
+   
+    // ─── НОВОЕ: совместимость с FFZ ───
+    const messageContainer = span.closest('.message') || 
+                            span.closest('.chat-line__message-container');
+    if (messageContainer) {
+        setTimeout(() => {
+            processFFZCompatibility(messageContainer);
+        }, 10);   // чуть больше задержки — FFZ иногда рендерит позже
+    }
+  }
+
+  
   function startChatRenderer() {
     if (chatObserver) chatObserver.disconnect();
     const chatList = document.querySelector(

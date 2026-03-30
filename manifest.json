@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "7BTVFZ Emote Picker [Twitch] ",
-  "version": "1.2603.2026",
+  "version": "1.3003.2026",
   "description": "Custom emote picker for Twitch chat: 7TV, BTTV, FFZ", 
    "homepage_url": "https://r6ftjr5uynmjtr-tfjtry5e-ntf7.netlify.app",
    "icons": {
@@ -33,16 +33,17 @@
       "*://*.twitch.tv/*",
       "https://www.twitch.tv/*"
     ],
-    "js": [
-      "content.js",
-      "GraphQL-seventv-fix.js",
-      "Inject_css.js",
-      "chat/emote-events.js",
-      "chat/send_in-chat_from-popup-emote.js",
-      "chat/EmotePopup-7BTVFZ.js",
-      "chat/autocomplete.js",
-       "chat/emoji-names.js",
-      "chat/TOOLTIP_Emote_hover.js"
+    "js": [ 
+        "content.js",
+        "GraphQL-seventv-fix.js",
+        "Inject_css.js",
+        "chat/emote-events.js",
+        "chat/send_in-chat_from-popup-emote.js",
+        "chat/EmotePopup-7BTVFZ.js",
+        "chat/autocomplete.js",
+        "chat/emoji-names.js",
+         "chat/emote_modifiers.js",
+        "chat/TOOLTIP_Emote_hover.js"
     ],
     "run_at": "document_idle"
   },
