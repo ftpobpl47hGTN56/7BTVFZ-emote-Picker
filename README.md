@@ -1,4 +1,4 @@
- # 7BTVFZ-emote-Picker
+## 7BTVFZ-emote-Picker
 browser extension popout panel emote-picker for chat.
 <img width="1149" height="778" alt="image" src="https://github.com/user-attachments/assets/6c247ebd-f147-4875-96ab-2e125569443e" />
 
@@ -6,19 +6,24 @@ browser extension popout panel emote-picker for chat.
 
 
 ![Version](https://img.shields.io/badge/version-1.3203.2026-blueviolet?style=flat-square)
+
 ![Manifest](https://img.shields.io/badge/Manifest-V3-blue?style=flat-square)
+
 ![Platform](https://img.shields.io/badge/platform-Chrome%20%2F%20Chromium-yellow?style=flat-square)
+
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
 [![Download](https://img.shields.io/badge/Download-v1.3203.2026-brightgreen?style=flat-square&logo=github)](https://github.com/ftpobpl47hGTN56/7BTVFZ-emote-Picker/releases/download/v1.3203.26/7BTVFZ_Emote_picker.zip)
 
+<img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/b95ae99a-2327-4c43-8721-c73f7c788570" />
 
-# 7BTVFZ Emote Picker for Twitch
+## 7BTVFZ Emote Picker for Twitch
 **Convenient, fast and beautiful emote picker for 7TV + BTTV + FFZ right in the Twitch chat**
 
 A modern alternative to the default Twitch picker and the FrankerFaceZ extension. 
 
-## Key Features
+<img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/306b269d-ce68-4071-a2da-276d9d81363e" />
+## main Features
 - Full **7TV** support (including zero-width, layers, latest 2025–2026 updates)
 - Support for **BTTV** and **FFZ** (both channel-specific and global emotes)
 - Extremely fast **virtualized list** — smooth scrolling even with 15,000+ emotes
@@ -43,6 +48,7 @@ A modern alternative to the default Twitch picker and the FrankerFaceZ extension
 | Separate beautiful popout window       | No                  | Yes               |
 | Handling of Twitch SPA navigation      | Average             | Excellent         |
 
+<img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/2f23c7fc-7e44-43a4-b81d-6b94122f2334" />
 ## Installation (currently for developers only)
 1. Download the repository as ZIP
 2. Go to Chrome → `chrome://extensions/`
