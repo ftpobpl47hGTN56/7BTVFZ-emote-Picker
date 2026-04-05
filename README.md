@@ -1,9 +1,8 @@
 ## 7BTVFZ-emote-Picker
 browser extension popout panel emote-picker for chat.
+
 <img width="1149" height="778" alt="image" src="https://github.com/user-attachments/assets/6c247ebd-f147-4875-96ab-2e125569443e" />
-
-
-
+ 
 
 ![Version](https://img.shields.io/badge/version-1.3203.2026-blueviolet?style=flat-square)
 
@@ -22,7 +21,8 @@ browser extension popout panel emote-picker for chat.
 
 A modern alternative to the default Twitch picker and the FrankerFaceZ extension. 
 
-<img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/306b269d-ce68-4071-a2da-276d9d81363e" />
+<img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/2f23c7fc-7e44-43a4-b81d-6b94122f2334" />
+
 ## main Features
 - Full **7TV** support (including zero-width, layers, latest 2025–2026 updates)
 - Support for **BTTV** and **FFZ** (both channel-specific and global emotes)
@@ -36,6 +36,7 @@ A modern alternative to the default Twitch picker and the FrankerFaceZ extension
 - Responsive dark design with pleasant animations
 
 ## Why it's better than the built-in FFZ picker?
+<img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/2f23c7fc-7e44-43a4-b81d-6b94122f2334" />
 
 | Feature                                | FFZ (2025–2026)     | 7BTVFZ Picker     |
 |----------------------------------------|---------------------|-------------------|
@@ -49,6 +50,7 @@ A modern alternative to the default Twitch picker and the FrankerFaceZ extension
 | Handling of Twitch SPA navigation      | Average             | Excellent         |
 
 <img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/2f23c7fc-7e44-43a4-b81d-6b94122f2334" />
+
 ## Installation (currently for developers only)
 1. Download the repository as ZIP
 2. Go to Chrome → `chrome://extensions/`
