@@ -1,3 +1,6 @@
+<img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/b95ae99a-2327-4c43-8721-c73f7c788570" />
+
+
 ## 7BTVFZ-emote-Picker
 browser extension popout panel emote-picker for chat.
 
