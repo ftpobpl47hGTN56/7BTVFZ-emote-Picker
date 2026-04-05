@@ -60,12 +60,8 @@ div#__emote_tooltip_iife__ {
         border-radius: .5rem !important;
         background-color: var(--bg-medium) !important;
         box-shadow: 4px 4px 8px #0000001a !important;
-    }
-
-
-   
- /*-------------------- hide sub gifted SPAM IN CHAT ------------*/
- 
+    } 
+  
     `;
     
     const styleElement = document.createElement('style');

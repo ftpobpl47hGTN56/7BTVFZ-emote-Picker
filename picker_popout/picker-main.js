@@ -16,7 +16,12 @@ function sendToContent(msg) {
 function applyResponse(r) {
   state.emotesByTab['7tv-ch']    = r.emotesByTab['7tv-ch']    || [];
   state.emotesByTab['7tv-gl']    = r.emotesByTab['7tv-gl']    || [];
-   state.loaded = r.loaded;
+  state.emotesByTab['bttv-ch']   = r.emotesByTab['bttv-ch']   || [];
+  state.emotesByTab['bttv-gl']   = r.emotesByTab['bttv-gl']   || [];
+  state.emotesByTab['ffz-ch']    = r.emotesByTab['ffz-ch']    || [];
+  state.emotesByTab['ffz-gl']    = r.emotesByTab['ffz-gl']    || [];
+  state.emotesByTab['twitch-gl'] = r.emotesByTab['twitch-gl'] || [];
+  state.loaded = r.loaded;
 }
 
 // ── Tabs ──────────────────────────────────────────────────────────────────────
@@ -73,12 +78,12 @@ async function init() {
   await new Promise(resolve => {
     chrome.tabs.get(twitchTabId, tab => {
       if (!chrome.runtime.lastError && tab) {
-      const m = tab.url?.match(/kick\.com\/popout\/([^/?#]+)/)
-             || tab.url?.match(/kick\.com\/([^/?#]+)/);
+        const m = tab.url?.match(/twitch\.tv\/popout\/([^/?#]+)/)
+               || tab.url?.match(/twitch\.tv\/([^/?#]+)/);
         if (m) {
           channelName = m[1].toLowerCase();
           headerCh.textContent = m[1];
-          document.title = `7tv-motes-picker — ${m[1]}`;
+          document.title = `7BTVFZ — ${m[1]}`;
         }
       }
       resolve();
@@ -90,17 +95,6 @@ async function init() {
   await loadSkinTone();
   state.emotesByTab.favs = [...favoritesMap.values()];
   renderGrid();
-
-  // Kick emotes — грузим параллельно, не блокируем UI
-  if (channelName) {
-    loadKickEmotes(channelName).then(() => {
-      if (state.activeTab === 'kick-ch' || state.activeTab === 'kick-gl') {
-        renderGrid();
-      }
-    });
-  } else {
-    state.kickLoaded = true; // нет канала — разблокируем сразу
-  }
 
   const resp = await sendToContent({ type: 'GET_EMOTES' });
   if (!resp) {
@@ -129,6 +123,7 @@ async function init() {
     }, 500);
   }
 }
+
 init();
 
 // ── Privacy Policy Modal ──────────────────────────────────────────────────────

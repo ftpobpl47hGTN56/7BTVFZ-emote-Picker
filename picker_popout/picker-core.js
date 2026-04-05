@@ -74,38 +74,6 @@ function loadEmojiCategoryState() {
   });
 }
 
-async function loadKickEmotes(channel) {
-  try {
-    const res = await fetch(`https://kick.com/emotes/${channel}`, {
-      headers: { 'accept': 'application/json', 'x-app-platform': 'web' },
-      credentials: 'include',
-    });
-    if (!res.ok) throw new Error(`Kick API ${res.status} for channel="${channel}"`);
-    const data = await res.json();
-
-    for (const group of data) {
-      if (typeof group.id === 'number') {
-        state.emotesByTab['kick-ch'] = group.emotes.map(e => ({
-          name : e.name,
-          src  : `https://files.kick.com/emotes/${e.id}/fullsize`,
-          id   : e.id,
-        }));
-      }
-      if (group.name === 'Global') {
-        state.emotesByTab['kick-gl'] = group.emotes.map(e => ({
-          name : e.name,
-          src  : `https://files.kick.com/emotes/${e.id}/fullsize`,
-          id   : e.id,
-        }));
-      }
-    }
-    state.kickLoaded = true;
-  } catch (err) {
-    console.warn('[Kick] Failed to load emotes for channel:', channel, err);
-    state.kickLoaded = true;
-  }
-}
-
 function saveEmojiCategoryState() {
   if (!chrome?.storage?.local) return;
   chrome.storage.local.set({ [EMOJI_STATE_KEY]: emojiCategoryState });
@@ -125,11 +93,12 @@ const state = {
   emotesByTab : {
     favs      : [],
     '7tv-ch'  : [], '7tv-gl'  : [],
-    'kick-ch' : [], 'kick-gl' : [],
+    'bttv-ch' : [], 'bttv-gl' : [],
+    'ffz-ch'  : [], 'ffz-gl'  : [],
+    'twitch-gl': [],
     emoji     : [],
   },
-  loaded     : false,
-  kickLoaded : false,
+  loaded: false,
 };
 
 // ── Unified Search ────────────────────────────────────────────────────────────
@@ -145,7 +114,9 @@ function getSearchResults(query) {
 
   const emoteSources = [
     ['7tv-ch', '7TV Ch'], ['7tv-gl', '7TV Global'],
-    ['kick-ch', 'Kick Ch'], ['kick-gl', 'Kick GL'],
+    ['bttv-ch', 'BTTV Ch'], ['bttv-gl', 'BTTV Global'],
+    ['ffz-ch', 'FFZ Ch'],  ['ffz-gl', 'FFZ Global'],
+    ['twitch-gl', 'Twitch Global'],
     ['favs', '★'],
   ];
 
@@ -331,10 +302,7 @@ function renderGrid() {
   const isFavs   = state.activeTab === 'emoji';
   const all       = getSearchResults(state.query);
 
-  const isKickTab = state.activeTab === 'kick-ch' || state.activeTab === 'kick-gl';
-  const isLoading = isKickTab ? !state.kickLoaded : (!state.loaded && !isFavs && !isGlobal);
-
-  if (isLoading) {
+  if (!state.loaded && !isFavs && !isGlobal) {
     grid.innerHTML = `<div class="state-msg">
       <div class="icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -413,7 +381,7 @@ function renderGrid() {
       const img   = document.createElement('img');
       img.src     = emote.src;
       const hires = emote.src2x || emote.src4x;
-      if (hires) img.srcset = `${emote.src} 1x, ${hires} 2x`;
+      if (hires) img.srcset = `${emote.src} 1x, ${hires} 1x`;
       img.alt     = emote.name;
       img.loading = 'lazy';
       img.onerror = function () { this.style.display = 'none'; };
@@ -445,11 +413,7 @@ function renderGrid() {
 
       cell.addEventListener('click', async e => {
         if (e.ctrlKey || e.metaKey) { e.preventDefault(); toggleFavorite(emote); return; }
-        // Kick-эмоуты имеют числовой id, 7TV — строковый
-        const insertName = (typeof emote.id === 'number')
-          ? `[emote:${emote.id}:${emote.name}] `
-          : emote.name + ' ';
-        await sendToContent({ type: 'INSERT_EMOTE', name: insertName });
+        await sendToContent({ type: 'INSERT_EMOTE', name: emote.name });
         chrome.tabs.update(twitchTabId, { active: true });
       });
     }
