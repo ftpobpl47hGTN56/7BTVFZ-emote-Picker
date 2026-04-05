@@ -1,363 +1,218 @@
 // ============================================================
-//  7BTVFZ Emote Autocomplete — autocomplete.js  (Tray Injection v4)
-//  Никогда не удаляет React-узлы — только скрывает и добавляет рядом.
-// ============================================================
+//  7tv-motes-picker Emote Autocomplete — autocomplete.js (Kick version)
+//  Shows a dropdown of matching emotes as you type in Kick chat.
+ // ============================================================
 (function () {
   'use strict';
 
-  const MAX_ITEMS      = 30;
-  const MIN_QUERY      = 1;
-  const DEBOUNCE_MS    = 80;
-  const INJECTED_ATTR  = 'data-sep-injected';
-  const HIDDEN_ATTR    = 'data-sep-hidden';
-  const CONTAINER_ID   = 'sep-ac-results';
+  const MAX_ITEMS   = 120;
+  const MIN_QUERY   = 1;
+  const DEBOUNCE_MS = 100;
+  const POPUP_ID    = 'sep-ac-popup';
 
-  const CLS_BASE   = 'ScInteractableBase-sc-ofisyf-0 ScInteractableDefault-sc-ofisyf-1 gFJWcf tw-interactable';
-  const CLS_ACTIVE = 'fWmmDT';
-  const CLS_NORMAL = 'gHDhCk';
+  let getEmotesFn   = null;
+  let debounceTimer = null;
+  let selectedIdx   = 0;
+  let items         = [];
 
-  let getEmotesFn       = null;
-  let currentInput      = null;
-  let debounceTimer     = null;
-  let trayObserver      = null;
-  let inputObserver     = null;
-  let selectedIdx       = 0;
-  let lastInjectedQuery = null;
-  let isInjecting       = false;
+  // Kick chat input selector
+  const INPUT_SEL = '[data-lexical-editor="true"], [data-testid="chat-input"], .editor-input[contenteditable="true"]';
 
-  const INPUT_SEL      = '[data-a-target="chat-input"], textarea[data-test-selector="chat-input"]';
-  const TRAY_LIST_SEL  = '[class*="autocomplete-match-list"]';
-  const TRAY_INNER_SEL = `${TRAY_LIST_SEL} .scrollable-area > .Layout-sc-1xcs6mc-0`;
+  // ── Public API (called by content.js) ────────────────────────────────────
+  window.__sepAC = {
+    init  : (fn) => { getEmotesFn = fn; attachInput(); },
+    update: (fn) => { getEmotesFn = fn; },
+  };
 
-  // ─── Query extraction ────────────────────────────────────────────────────────
-  function getColonWord(input) {
-    const val = input.isContentEditable ? input.textContent : input.value;
-    const pos = input.isContentEditable
-      ? (window.getSelection()?.getRangeAt(0)?.startOffset ?? val.length)
-      : (input.selectionStart ?? val.length);
-    let start = pos;
-    while (start > 0 && !/[\s\n]/.test(val[start - 1])) start--;
-    const word = val.slice(start, pos);
-    if (!word.startsWith(':') || word.length < MIN_QUERY + 1) return null;
-    return { word, start, end: pos, query: word.slice(1) };
-  }
-
-  // ─── Emote search ────────────────────────────────────────────────────────────
-  function searchEmotes(query) {
-    if (!getEmotesFn) return [];
-    const map = getEmotesFn();
-    if (!map?.size) return [];
-    const q = query.toLowerCase();
-    const prefix = [], middle = [];
-    for (const [name, e] of map) {
-      const l = name.toLowerCase();
-      if (l === q)               prefix.unshift({ name, ...e });
-      else if (l.startsWith(q)) prefix.push({ name, ...e });
-      else if (l.includes(q))   middle.push({ name, ...e });
+  // ── Get current caret word ────────────────────────────────────────────────
+  function getCaretWord(input) {
+    if (input.contentEditable === 'true') {
+      const sel = window.getSelection();
+      if (!sel.rangeCount) return '';
+      const range = sel.getRangeAt(0).cloneRange();
+      range.collapse(true);
+      // Get text before caret
+      const textBefore = range.startContainer.textContent?.slice(0, range.startOffset) || '';
+      const match = textBefore.match(/\S+$/);
+      return match ? match[0] : '';
     }
-    return [...prefix, ...middle].slice(0, MAX_ITEMS);
-  }
-
-  // ─── Source badge ────────────────────────────────────────────────────────────
-  function sourceLabel(e) {
-    if (e.source) return e.source.toUpperCase();
-    const u = e.src || '';
-    if (u.includes('7tv.app'))   return '7TV';
-    if (u.includes('betterttv')) return 'BTTV';
-    if (u.includes('frankerfacez') || u.includes('cdn.ffz')) return 'FFZ';
     return '';
   }
 
-  // ─── Tray DOM helpers ────────────────────────────────────────────────────────
-  // Скрыть нативный контент Твича — НЕ УДАЛЯТЬ, только display:none
-  function hideTwitchContent(inner) {
-    [...inner.children].forEach(child => {
-      if (child.id === CONTAINER_ID) return; // наш — не трогаем
-      child.setAttribute(HIDDEN_ATTR, child.style.display || '');
-      child.style.display = 'none';
-    });
+  function replaceCaretWord(input, word, replacement) {
+    if (input.contentEditable !== 'true') return;
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    const range = sel.getRangeAt(0).cloneRange();
+    range.collapse(true);
+
+    const node   = range.startContainer;
+    const offset = range.startOffset;
+    const text   = node.textContent || '';
+    const before = text.slice(0, offset);
+    const idx    = before.lastIndexOf(word);
+    if (idx === -1) return;
+
+    // Replace in the text node
+    node.textContent = text.slice(0, idx) + replacement + ' ' + text.slice(offset);
+    // Move cursor after replacement
+    const newOffset = idx + replacement.length + 1;
+    const newRange  = document.createRange();
+    newRange.setStart(node, Math.min(newOffset, node.textContent.length));
+    newRange.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(newRange);
+
+    // Trigger Lexical update
+    input.dispatchEvent(new InputEvent('input', { bubbles: true, cancelable: true }));
   }
 
-  // Восстановить нативный контент
-  function showTwitchContent(inner) {
-    [...inner.children].forEach(child => {
-      if (!child.hasAttribute(HIDDEN_ATTR)) return;
-      child.style.display = child.getAttribute(HIDDEN_ATTR) || '';
-      child.removeAttribute(HIDDEN_ATTR);
-    });
-  }
-
-  // Удалить только наш контейнер и восстановить Твич
-  function cleanupTray() {
-    const container = document.getElementById(CONTAINER_ID);
-    if (container) {
-      const inner = container.parentElement;
-      container.remove(); // только наш узел — безопасно
-      if (inner) showTwitchContent(inner);
+  // ── Popup ─────────────────────────────────────────────────────────────────
+  function ensurePopup() {
+    let el = document.getElementById(POPUP_ID);
+    if (!el) {
+      el = document.createElement('div');
+      el.id = POPUP_ID;
+      el.style.cssText = `
+        position: fixed;
+        z-index: 9999;
+        background:rgb(8, 8, 45);
+        border: 1px solid rgb(240, 188, 93);
+        border-radius: 6px;
+        box-shadow: 0 4px 16px rgba(0,0,0,.6);
+        padding: 5px 0;
+        max-height: 480px;
+        overflow-y: auto;
+        min-width: 200px;
+        font-family: Inter, Roobert, sans-serif;
+        font-size: 14px;
+      `;
+      document.body.appendChild(el);
     }
-    lastInjectedQuery = null;
+    return el;
   }
 
-  // ─── Navigation ──────────────────────────────────────────────────────────────
-  function getOurButtons() {
-    const c = document.getElementById(CONTAINER_ID);
-    if (!c) return [];
-    return [...c.querySelectorAll(`button[${INJECTED_ATTR}]`)];
+  function hidePopup() {
+    const el = document.getElementById(POPUP_ID);
+    if (el) el.style.display = 'none';
+    items = []; selectedIdx = 0;
   }
 
-  function isOurTrayActive() {
-    return !!document.getElementById(CONTAINER_ID);
-  }
+  function showPopup(input, word) {
+    if (!getEmotesFn) return;
+    const emoteMap = getEmotesFn();
+    if (!emoteMap || emoteMap.size === 0) return;
 
-  function updateSelection(buttons, idx) {
-    buttons.forEach((btn, i) => {
-      btn.classList.toggle(CLS_ACTIVE, i === idx);
-      btn.classList.toggle(CLS_NORMAL, i !== idx);
-    });
-    selectedIdx = idx;
-    buttons[idx]?.scrollIntoView({ block: 'nearest' });
-  }
+    const q = word.toLowerCase();
+    items = [...emoteMap.entries()]
+      .filter(([name]) => name.toLowerCase().includes(q))
+      .slice(0, MAX_ITEMS)
+      .map(([name, e]) => ({ name, src: e.src }));
 
-  // ─── Insert emote ────────────────────────────────────────────────────────────
-  function insertEmote(name) {
-    const input = currentInput;
-    if (!input) return;
-
-    if (input.isContentEditable) {
-      const sel = window.getSelection();
-      if (!sel?.rangeCount) return;
-      const range = sel.getRangeAt(0);
-      const node  = range.startContainer;
-      if (node.nodeType !== Node.TEXT_NODE) return;
-      const pos = range.startOffset;
-      let start = pos;
-      while (start > 0 && !/[\s\n]/.test(node.textContent[start - 1])) start--;
-      range.setStart(node, start);
-      range.deleteContents();
-      const t = document.createTextNode(name + ' ');
-      range.insertNode(t);
-      range.setStartAfter(t);
-      range.collapse(true);
-      sel.removeAllRanges();
-      sel.addRange(range);
-      input.dispatchEvent(new InputEvent('input', { bubbles: true }));
-    } else {
-      const val  = input.value;
-      const pos  = input.selectionStart ?? val.length;
-      let start  = pos;
-      while (start > 0 && !/[\s\n]/.test(val[start - 1])) start--;
-      const insert = name + ' ';
-      const setter = Object.getOwnPropertyDescriptor(
-        HTMLTextAreaElement.prototype, 'value'
-      )?.set;
-      const next = val.slice(0, start) + insert + val.slice(pos);
-      if (setter) setter.call(input, next);
-      else input.value = next;
-      input.selectionStart = input.selectionEnd = start + insert.length;
-      input.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: insert }));
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-
-    // Сначала чистим трей, потом фокус — порядок важен
-    cleanupTray();
-    input.focus();
-  }
-
-  // ─── Window keydown guard ────────────────────────────────────────────────────
-  window.addEventListener('keydown', e => {
-    if (!isOurTrayActive()) return;
-    const buttons = getOurButtons();
-    if (!buttons.length) return;
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.stopImmediatePropagation(); e.preventDefault();
-        updateSelection(buttons, (selectedIdx + 1) % buttons.length);
-        break;
-      case 'ArrowUp':
-        e.stopImmediatePropagation(); e.preventDefault();
-        updateSelection(buttons, (selectedIdx - 1 + buttons.length) % buttons.length);
-        break;
-      case 'Tab':
-        if (e.shiftKey) return;
-        /* fall-through */
-      case 'Enter':
-        e.stopImmediatePropagation(); e.preventDefault();
-        { const btn = buttons[selectedIdx];
-          if (btn) insertEmote(btn.getAttribute('data-sep-name')); }
-        break;
-      case 'Escape':
-        cleanupTray();
-        break;
-    }
-  }, { capture: true });
-
-  // ─── Build button ────────────────────────────────────────────────────────────
-  function buildButton(emote, idx) {
-    const btn = document.createElement('button');
-    btn.className = `${CLS_BASE} ${idx === 0 ? CLS_ACTIVE : CLS_NORMAL}`;
-    btn.setAttribute('data-a-target',    emote.name);
-    btn.setAttribute(INJECTED_ATTR,      '1');
-    btn.setAttribute('data-sep-name',    emote.name);
-    btn.setAttribute('data-click-index', String(idx));
-    btn.type = 'button';
-
-    const srcset = emote.src2x ? `${emote.src} 1x, ${emote.src2x} 2x` : emote.src;
-    const label  = sourceLabel(emote);
-    const badge  = label
-      ? `<span style="font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;
-             background:rgba(255,255,255,.08);color:#adadb8;margin-left:4px;
-             text-transform:uppercase;flex-shrink:0;">${label}</span>`
-      : '';
-    const zw = emote.zeroWidth
-      ? `<span style="font-size:9px;padding:1px 4px;border-radius:3px;
-             background:rgba(255,255,255,.06);color:#adadb8;margin-left:2px;
-             flex-shrink:0;">ZW</span>`
-      : '';
-
-    btn.innerHTML = `
-      <div class="Layout-sc-1xcs6mc-0 jvESPo">
-        <div class="tw-relative tw-flex-shrink-0 tw-pd-05" title="${emote.name}">
-          <img class="emote-autocomplete-provider__image"
-               src="${emote.src}" srcset="${srcset}"
-               alt="${emote.name}" loading="lazy"
-               style="width:28px;height:28px;object-fit:contain;">
-        </div>
-        <div class="tw-ellipsis" style="display:flex;align-items:center;">
-          ${emote.name}${badge}${zw}
-        </div>
-      </div>`;
-
-    btn.addEventListener('mousedown', e => e.preventDefault());
-    btn.addEventListener('click', () => insertEmote(emote.name));
-    return btn;
-  }
-
-  // ─── Inject into tray ────────────────────────────────────────────────────────
-  function injectIntoTray(query) {
-    if (isInjecting) return;
-    if (lastInjectedQuery === query) return;
-
-    const results = searchEmotes(query);
-    if (!results.length) {
-      // Нет результатов — убираем наш контейнер если был, показываем Твич "No matches"
-      cleanupTray();
-      return;
-    }
-
-    const inner = document.querySelector(TRAY_INNER_SEL);
-    if (!inner) return;
-
-    isInjecting = true;
-    if (trayObserver) trayObserver.disconnect();
-
-    lastInjectedQuery = query;
+    if (!items.length) { hidePopup(); return; }
     selectedIdx = 0;
 
-    // Убираем старый контейнер если есть
-    document.getElementById(CONTAINER_ID)?.remove();
-
-    // Скрываем нативный контент Твича (не удаляем!)
-    hideTwitchContent(inner);
-
-    // Создаём наш контейнер и добавляем в конец
-    const container = document.createElement('div');
-    container.id = CONTAINER_ID;
-
-    results.forEach((emote, i) => {
-      const wrap = document.createElement('div');
-      wrap.className = 'Layout-sc-1xcs6mc-0';
-      wrap.appendChild(buildButton(emote, i));
-      container.appendChild(wrap);
+    const popup = ensurePopup();
+    popup.innerHTML = '';
+    items.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.style.cssText = `
+        display: flex; align-items: center; gap: 8px;
+        padding: 4px 10px; cursor: pointer;
+        background: ${i === selectedIdx ? '#2a2a2d' : 'transparent'};
+        color: #efeff1;
+      `;
+      row.dataset.idx = i;
+      const img = document.createElement('img');
+      img.src = item.src; img.alt = item.name;
+      img.style.cssText = 'width:22px;height:22px;object-fit:contain;';
+      const span = document.createElement('span');
+      span.textContent = item.name;
+      row.appendChild(img); row.appendChild(span);
+      row.addEventListener('mousedown', e => {
+        e.preventDefault();
+        selectItem(input, i);
+      });
+      popup.appendChild(row);
     });
 
-    inner.appendChild(container); // appendChild — не трогает существующие узлы
-
-    setTimeout(() => {
-      isInjecting = false;
-      startTrayObserver();
-    }, 150);
+    // Position above the input
+    const rect = input.getBoundingClientRect();
+    popup.style.display  = 'block';
+    popup.style.left     = `${rect.left}px`;
+    popup.style.bottom   = `${window.innerHeight - rect.top + 4}px`;
+    popup.style.top      = '';
   }
 
-  // ─── Input handler ────────────────────────────────────────────────────────────
-  function onInput() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      if (!currentInput) return;
-      const info = getColonWord(currentInput);
-      if (!info) {
-        cleanupTray();
-        return;
+  function selectItem(input, idx) {
+    const item = items[idx];
+    if (!item) return;
+    const word = getCaretWord(input);
+    replaceCaretWord(input, word, item.name);
+    hidePopup();
+  }
+
+  function updateSelection(popup) {
+    Array.from(popup.children).forEach((row, i) => {
+      row.style.background = i === selectedIdx ? '#2a2a2d' : 'transparent';
+    });
+    popup.children[selectedIdx]?.scrollIntoView({ block: 'nearest' });
+  }
+
+  // ── Attach to Kick input ──────────────────────────────────────────────────
+  function attachInput() {
+    // Wait for the input to appear
+    const tryAttach = () => {
+      const input = document.querySelector(INPUT_SEL);
+      if (!input) { setTimeout(tryAttach, 1000); return; }
+      bindInput(input);
+    };
+    tryAttach();
+
+    // Also observe for input re-creation after SPA navigation
+    new MutationObserver(() => {
+      const input = document.querySelector(INPUT_SEL);
+      if (input && !input.dataset.sepAcBound) bindInput(input);
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+
+  function bindInput(input) {
+    if (input.dataset.sepAcBound) return;
+    input.dataset.sepAcBound = 'true';
+
+    input.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const word = getCaretWord(input);
+        if (word.length < MIN_QUERY + 1) { hidePopup(); return; }
+        showPopup(input, word);
+      }, DEBOUNCE_MS);
+    });
+
+    input.addEventListener('keydown', e => {
+      const popup = document.getElementById(POPUP_ID);
+      if (!popup || popup.style.display === 'none' || !items.length) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedIdx = Math.min(selectedIdx + 1, items.length - 1);
+        updateSelection(popup);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedIdx = Math.max(selectedIdx - 1, 0);
+        updateSelection(popup);
+      } else if (e.key === 'Tab' || e.key === 'Enter') {
+        if (items.length) {
+          e.preventDefault();
+          selectItem(input, selectedIdx);
+        }
+      } else if (e.key === 'Escape') {
+        hidePopup();
       }
-      if (info.query !== lastInjectedQuery) lastInjectedQuery = null;
-      setTimeout(() => injectIntoTray(info.query), 60);
-    }, DEBOUNCE_MS);
-  }
-
-  function attachInput(input) {
-    if (currentInput === input) return;
-    currentInput?.removeEventListener('input', onInput);
-    currentInput = input;
-    input.addEventListener('input', onInput);
-  }
-
-  function tryAttach() {
-    const input = document.querySelector(INPUT_SEL);
-    if (input) attachInput(input);
-  }
-
-  // ─── Tray observer ────────────────────────────────────────────────────────────
-  function startTrayObserver() {
-    if (trayObserver) trayObserver.disconnect();
-    const tray = document.querySelector(TRAY_LIST_SEL);
-    if (!tray) { setTimeout(startTrayObserver, 800); return; }
-
-    trayObserver = new MutationObserver(() => {
-      if (isInjecting) return;
-      if (!currentInput) return;
-      const info = getColonWord(currentInput);
-      if (!info) { cleanupTray(); return; }
-
-      // Наш контейнер на месте — ничего не делаем
-      if (document.getElementById(CONTAINER_ID)) return;
-
-      if (info.query !== lastInjectedQuery) lastInjectedQuery = null;
-      const inner = document.querySelector(TRAY_INNER_SEL);
-      if (!inner) return;
-      const hasNoMatch = inner.textContent?.includes('No matches');
-      const hasItems   = inner.querySelector('button');
-      if (hasNoMatch || !hasItems) injectIntoTray(info.query);
     });
 
-    trayObserver.observe(tray, { childList: true, subtree: true });
+    input.addEventListener('blur', () => setTimeout(hidePopup, 150));
   }
 
-  // ─── SPA observer ────────────────────────────────────────────────────────────
-  function startInputObserver() {
-    if (inputObserver) inputObserver.disconnect();
-    inputObserver = new MutationObserver(() => {
-      if (!currentInput || !document.body.contains(currentInput)) {
-        cleanupTray();
-        tryAttach();
-        startTrayObserver();
-      }
-    });
-    inputObserver.observe(document.body, { childList: true, subtree: true });
-  }
-
-  // ─── Public API ───────────────────────────────────────────────────────────────
-  window.__sepAC = {
-    init(fn) {
-      if (typeof fn !== 'function') return;
-      getEmotesFn = fn;
-      tryAttach();
-      startInputObserver();
-      startTrayObserver();
-      console.log('[SEP-AC] ✅ ready (v4 — safe tray injection)');
-    },
-    update(fn) {
-      if (typeof fn === 'function') getEmotesFn = fn;
-    },
-  };
-
+  console.log('[SEP AC] Kick autocomplete loaded ✓');
 })();

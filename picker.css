@@ -238,8 +238,8 @@ html, body {
   background: rgb(40 85 97 / 81%); 
 }
 .emote img {
-  max-width: 60px;
-  max-height: 60px;
+   width: 60px;
+   height: 60px;
   object-fit: contain;
   pointer-events: none;
   display: block;

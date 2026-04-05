@@ -1,26 +1,27 @@
-// background.js — service worker
-// Handles opening the popout picker window.
+// background.js — service worker (Kick version)
 
-let pickerWindowId = null; // only one popout at a time
+// Map<kickTabId, pickerWindowId>
+const pickerWindows = new Map();
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
- 
-  if (msg.type === 'OPEN_POPOUT') {
-    const twitchTabId = sender.tab?.id;
-    if (!twitchTabId) return;
 
-    // If already open — focus it instead of opening a second one
-    if (pickerWindowId !== null) {
-      chrome.windows.get(pickerWindowId, {}, (win) => {
+  if (msg.type === 'OPEN_POPOUT') {
+    const kickTabId = sender.tab?.id;
+    if (!kickTabId) return;
+
+    const existingWindowId = pickerWindows.get(kickTabId);
+
+    if (existingWindowId !== undefined) {
+      chrome.windows.get(existingWindowId, {}, (win) => {
         if (chrome.runtime.lastError || !win) {
-          pickerWindowId = null;
-          openWindow(twitchTabId);
+          pickerWindows.delete(kickTabId);
+          openWindow(kickTabId);
         } else {
-          chrome.windows.update(pickerWindowId, { focused: true });
+          chrome.windows.update(existingWindowId, { focused: true });
         }
       });
     } else {
-      openWindow(twitchTabId);
+      openWindow(kickTabId);
     }
 
     sendResponse({ ok: true });
@@ -29,22 +30,21 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 });
 
-function openWindow(twitchTabId) {
-  const url = chrome.runtime.getURL(`picker.html?tabId=${twitchTabId}`);
+function openWindow(kickTabId) {
+  const url = chrome.runtime.getURL(`picker.html?tabId=${kickTabId}`);
 
   chrome.windows.create({
     url    : url,
-    type   : 'popup',       // frameless popout window — just like Twitch popout chat
-    width  : 995,
-    height : 640,
+    type   : 'popup',
+    width  : 565,
+    height : 570,
     focused: true,
   }, (win) => {
-    pickerWindowId = win.id;
+    pickerWindows.set(kickTabId, win.id);
 
-    // Clean up when window is closed
     chrome.windows.onRemoved.addListener(function onRemoved(windowId) {
-      if (windowId === pickerWindowId) {
-        pickerWindowId = null;
+      if (windowId === win.id) {
+        pickerWindows.delete(kickTabId);
         chrome.windows.onRemoved.removeListener(onRemoved);
       }
     });
