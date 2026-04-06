@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy policy — 7BTVFZ Emote Picker</title>
+    <style>
+        :root {
+            --bg: #0f0f17;
+            --text: #e0e0ff;
+            --accent: #a78bfa;
+            --card: #1a1a2e;
+            --border: #2a2a40;
+            --btn-bg: #6d28d9;
+            --btn-hover: #7c3aed;
+            --code-bg: #0d0d1a;
+            --success: #86efac;
+            --warning: #fbbf24;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .lang-switch {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            background: var(--btn-bg);
+            color: white;
+            border: 2px solid transparent;
+            padding: 0.75rem 1.8rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background: var(--btn-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(109, 40, 217, 0.4);
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            border-color: white;
+            box-shadow: 0 0 16px rgba(167, 139, 250, 0.6);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #8a8ab8;
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+
+        .date {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+        }
+
+        .toc {
+            background: rgba(109, 40, 217, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+            border-radius: 8px;
+        }
+
+        .toc h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: #c4b5fd;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .content-ru,
+        .content-en {
+            display: none;
+        }
+
+        .content-ru.active,
+        .content-en.active {
+            display: block;
+        }
+
+        section {
+            margin-bottom: 2.5rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: var(--accent);
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--border);
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            color: #c4b5fd;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+            color: #d0d0e8;
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin-left: 1.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            color: #d0d0e8;
+        }
+
+        .highlight {
+            color: #fbbf24;
+            font-weight: 600;
+            background: rgba(251, 191, 36, 0.1);
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .success {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .warning {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            color: #86efac;
+        }
+
+        .box {
+            background: rgba(167, 139, 250, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .box-success {
+            background: rgba(134, 239, 172, 0.1);
+            border-left-color: var(--success);
+        }
+
+        .box-warning {
+            background: rgba(251, 191, 36, 0.1);
+            border-left-color: var(--warning);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--code-bg);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: rgba(167, 139, 250, 0.2);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: rgba(167, 139, 250, 0.05);
+        }
+
+        .footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border);
+            text-align: center;
+            color: #8a8ab8;
+            font-size: 0.95rem;
+        }
+
+        .contact-info {
+            background: rgba(167, 139, 250, 0.15);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.35rem;
+            }
+
+            .lang-switch {
+                gap: 0.5rem;
+            }
+
+            .lang-btn {
+                padding: 0.65rem 1.4rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            .lang-btn {
+                padding: 0.6rem 1.1rem;
+                font-size: 0.9rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Language Switch -->
+        <div class="lang-switch">
+            <button class="lang-btn active" data-lang="ru">🇷🇺 Русский</button>
+            <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+        </div>
+
+        <!-- Title -->
+        <h1 data-ru="Политика конфиденциальности" data-en="Privacy Policy">
+            Политика конфиденциальности
+        </h1>
+
+        <p class="subtitle" data-ru="7BTVFZ Emote Picker для Twitch" data-en="7BTVFZ Emote Picker for Twitch">
+            7BTVFZ Emote Picker для Twitch
+        </p>
+
+        <div class="date" data-ru="Дата вступления в силу: март 2026 г." data-en="Effective Date: March 2026">
+            Дата вступления в силу: март 2026 г.
+        </div>
+
+        <!-- Russian Version -->
+        <div class="content-ru active">
+
+            <!-- Table of Contents -->
+            <div class="toc">
+                <h3>Содержание</h3>
+                <ul>
+                    <li><a href="#overview">Обзор</a></li>
+                    <li><a href="#data-collection">Сбор данных</a></li>
+                    <li><a href="#data-storage">Хранение данных</a></li>
+                    <li><a href="#third-party">Сторонние сервисы</a></li>
+                    <li><a href="#user-control">Контроль пользователя</a></li>
+                    <li><a href="#security">Безопасность</a></li>
+                    <li><a href="#changes">Изменения политики</a></li>
+                    <li><a href="#contact">Контакты</a></li>
+                </ul>
+            </div>
+
+            <!-- 1. Overview -->
+            <section id="overview">
+                <h2>1. Обзор</h2>
+                <p>
+                    <strong>7BTVFZ Emote Picker</strong> — это расширение для браузера Chrome, предназначенное для удобного выбора и вставки смайликов в чат Twitch. Расширение интегрирует эмоты из популярных платформ: <code>7TV</code>, <code>BTTV</code> (BetterTTV) и <code>FFZ</code> (FrankerFaceZ).
+                </p>
+                <div class="box box-success">
+                    <p><span class="success">✓ Основной принцип:</span> Мы уважаем вашу приватность и <span class="highlight">минимизируем</span> сбор и обработку личных данных.</p>
+                </div>
+            </section>
+
+            <!-- 2. Data Collection -->
+            <section id="data-collection">
+                <h2>2. Какие данные мы собираем?</h2>
+
+                <h3>2.1 Данные, которые МЫ НЕ собираем</h3>
+                <div class="box box-success">
+                    <ul>
+                        <li><span class="success">✓</span> Личную информацию (имя, email, адрес, телефон)</li>
+                        <li><span class="success">✓</span> IP-адреса или данные о местоположении</li>
+                        <li><span class="success">✓</span> Историю браузера или файлы cookies</li>
+                        <li><span class="success">✓</span> Пароли или учётные данные</li>
+                        <li><span class="success">✓</span> Идентификационные данные аккаунтов</li>
+                        <li><span class="success">✓</span> Аналитику использования или отслеживание действий</li>
+                    </ul>
+                </div>
+
+                <h3>2.2 Данные, которые сохраняются локально</h3>
+                <p>Единственные данные, которые расширение сохраняет — это <span class="highlight">ваши избранные эмоты</span>:</p>
+                <ul>
+                    <li><strong>Имена эмотов</strong> (текстовые строки, например: "Kappa", "monkaS")</li>
+                    <li><strong>URL-адреса изображений</strong> эмотов</li>
+                    <li><strong>Настройки тона кожи</strong> (для эмотов с модификаторами)</li>
+                    <li><strong>Состояние категорий</strong> (развёрнуты/свёрнуты разделы эмотов)</li>
+                </ul>
+
+                <h3>2.3 Данные при использовании API</h3>
+                <p>Для отображения актуального списка эмотов расширение делает запросы к <span class="highlight">публичным API</span> следующих сервисов:</p>
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th>Сервис</th>
+                            <th>Назначение</th>
+                            <th>Отправляемые данные</th>
+                        </tr>
+                        <tr>
+                            <td><strong>7TV.io</strong></td>
+                            <td>Получение эмотов 7TV</td>
+                            <td>Имя канала Twitch (в URL)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>BTTV.net</strong></td>
+                            <td>Получение эмотов BetterTTV</td>
+                            <td>ID пользователя Twitch (в URL)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FFZ.com</strong></td>
+                            <td>Получение эмотов FrankerFaceZ</td>
+                            <td>Имя канала Twitch (в URL)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Twitch.tv API</strong></td>
+                            <td>Получение информации о канале</td>
+                            <td>Имя и ID канала</td>
+                        </tr>
+                    </table>
+                </div>
+                <p><strong>Важно:</strong> Эти запросы отправляют только информацию о <span class="highlight">названии/ID канала</span> — никакая личная информация не передаётся.</p>
+            </section>
+
+            <!-- 3. Data Storage -->
+            <section id="data-storage">
+                <h2>3. Как мы храним данные?</h2>
+
+                <h3>3.1 Локальное хранилище (Chrome Storage)</h3>
+                <p>Все ваши данные о избранных эмотах хранятся <span class="highlight">исключительно локально</span> в вашем браузере с использованием <code>chrome.storage.local</code>:</p>
+                <div class="box">
+                    <ul>
+                        <li>📍 <strong>Место хранения:</strong> локальный диск вашего компьютера</li>
+                        <li>🔒 <strong>Доступ:</strong> только расширение 7BTVFZ может получить доступ</li>
+                        <li>🚫 <strong>Передача:</strong> данные никогда не отправляются на серверы</li>
+                        <li>⏱️ <strong>Время жизни:</strong> хранятся до удаления расширения</li>
+                    </ul>
+                </div>
+
+                <h3>3.2 Что происходит при удалении расширения?</h3>
+                <p>При удалении расширения Chrome все связанные с ним данные <span class="success">автоматически удаляются</span> с вашего устройства.</p>
+            </section>
+
+            <!-- 4. Third-Party Services -->
+            <section id="third-party">
+                <h2>4. Сторонние сервисы</h2>
+                <p>Расширение использует следующие сторонние платформы для получения списков эмотов:</p>
+
+                <h3>4.1 7TV (7tv.io)</h3>
+                <p>
+                    <strong>Что это:</strong> Платформа для создания и обмена кастомными эмотами для Twitch.
+                </p>
+                <p>
+                    <strong>Какие данные отправляются:</strong> Имя канала (в URL запроса).
+                </p>
+                <p>
+                    <strong>Политика конфиденциальности:</strong> <a href="https://7tv.io" style="color: #c4b5fd;">https://7tv.io</a>
+                </p>
+
+                <h3>4.2 BetterTTV (betterttv.net)</h3>
+                <p>
+                    <strong>Что это:</strong> Популярное расширение для улучшения опыта просмотра Twitch.
+                </p>
+                <p>
+                    <strong>Какие данные отправляются:</strong> ID пользователя Twitch (в URL запроса).
+                </p>
+                <p>
+                    <strong>Политика конфиденциальности:</strong> <a href="https://betterttv.net" style="color: #c4b5fd;">https://betterttv.net</a>
+                </p>
+
+                <h3>4.3 FrankerFaceZ (frankerfacez.com)</h3>
+                <p>
+                    <strong>Что это:</strong> Расширение для Twitch с поддержкой эмотов и тем оформления.
+                </p>
+                <p>
+                    <strong>Какие данные отправляются:</strong> Имя канала (в URL запроса).
+                </p>
+                <p>
+                    <strong>Политика конфиденциальности:</strong> <a href="https://frankerfacez.com" style="color: #c4b5fd;">https://frankerfacez.com</a>
+                </p>
+
+                <div class="box box-warning">
+                    <p><strong>⚠️ Важно:</strong> Мы <strong>не контролируем</strong> политику конфиденциальности этих сервисов. Вы принимаете их условия при использовании расширения.</p>
+                </div>
+            </section>
+
+            <!-- 5. User Control -->
+            <section id="user-control">
+                <h2>5. Ваш контроль над данными</h2>
+
+                <h3>5.1 Управление избранными эмотами</h3>
+                <ul>
+                    <li><strong>Добавление:</strong> Кликните на любой эмот в пикере или используйте Ctrl+Click</li>
+                    <li><strong>Удаление:</strong> Кликните на избранный эмот, чтобы удалить его из списка</li>
+                    <li><strong>Просмотр:</strong> Откройте вкладку "Избранные" в окне пикера</li>
+                </ul>
+
+                <h3>5.2 Удаление расширения</h3>
+                <p>Если вы захотите полностью удалить расширение:</p>
+                <ol>
+                    <li>Откройте <code>chrome://extensions/</code> в адресной строке</li>
+                    <li>Найдите <strong>7BTVFZ Emote Picker</strong></li>
+                    <li>Нажмите кнопку <strong>"Удалить"</strong></li>
+                    <li>Все данные будут <span class="success">автоматически удалены</span></li>
+                </ol>
+
+                <h3>5.3 Доступ к данным хранилища</h3>
+                <p>Chrome позволяет вам просмотреть все данные расширения:</p>
+                <ol>
+                    <li>Откройте Developer Tools (<kbd>F12</kbd> или <kbd>Ctrl+Shift+I</kbd>)</li>
+                    <li>Перейдите на вкладку <strong>Application</strong></li>
+                    <li>В левом меню найдите <strong>Storage → Local Storage</strong></li>
+                    <li>Выберите расширение <strong>7BTVFZ Emote Picker</strong></li>
+                </ol>
+            </section>
+
+            <!-- 6. Security -->
+            <section id="security">
+                <h2>6. Безопасность</h2>
+
+                <h3>6.1 Как мы защищаем ваши данные?</h3>
+                <ul>
+                    <li>✓ Все данные хранятся <span class="highlight">локально в браузере</span>, не на серверах</li>
+                    <li>✓ Используются <span class="highlight">защищённые соединения (HTTPS)</span> для всех API запросов</li>
+                    <li>✓ Расширение <span class="highlight">не требует сетевых прав</span> кроме необходимых API</li>
+                    <li>✓ Код расширения <span class="highlight">открыт для проверки</span> (open-source)</li>
+                </ul>
+
+                <h3>6.2 Что вы должны знать?</h3>
+                <div class="box">
+                    <p>
+                        <strong>Примечание:</strong> Если ваш компьютер взломан или заражён вредоносным ПО, теоретически злоумышленник может получить доступ к локальным данным Chrome. Однако это касается всех расширений и браузеров.
+                    </p>
+                </div>
+            </section>
+
+            <!-- 7. Policy Changes -->
+            <section id="changes">
+                <h2>7. Изменения в политике</h2>
+                <p>
+                    Мы можем обновить эту политику конфиденциальности в любое время. При внесении существенных изменений:
+                </p>
+                <ul>
+                    <li>Мы обновим дату "Дата вступления в силу" в верхней части этой страницы</li>
+                    <li>Вы получите уведомление в расширении (если применимо)</li>
+                    <li>Продолжение использования расширения означает согласие с новыми условиями</li>
+                </ul>
+            </section>
+
+            <!-- 8. Contact -->
+            <section id="contact">
+                <h2>8. Связь с нами</h2>
+                <p>
+                    Если у вас есть вопросы, беспокойства или предложения по нашей политике конфиденциальности, свяжитесь с нами:
+                </p>
+                <div class="contact-info">
+                    <p><strong>Электронная почта:</strong> <code>mahammadieret@gmail.com</code></p>
+                    <p><strong>GitHub:</strong> <a href="https://github.com/ftpobpl47hGTN56/7BTVFZ-emote-Picker" style="color: #c4b5fd;">github.com/7btvfz</a></p>
+                 </div>
+            </section>
+
+            <div class="footer">
+                <p>© 2026 7BTVFZ Emote Picker. Все права защищены.</p>
+                <p>Последнее обновление: март 2026 г.</p>
+            </div>
+
+        </div>
+
+        <!-- English Version -->
+        <div class="content-en">
+
+            <!-- Table of Contents -->
+            <div class="toc">
+                <h3>Table of Contents</h3>
+                <ul>
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#data-collection">Data Collection</a></li>
+                    <li><a href="#data-storage">Data Storage</a></li>
+                    <li><a href="#third-party">Third-Party Services</a></li>
+                    <li><a href="#user-control">User Control</a></li>
+                    <li><a href="#security">Security</a></li>
+                    <li><a href="#changes">Policy Changes</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- 1. Overview -->
+            <section id="overview">
+                <h2>1. Overview</h2>
+                <p>
+                    <strong>7BTVFZ Emote Picker</strong> is a Chrome browser extension designed to provide convenient selection and insertion of emotes into Twitch chat. The extension integrates emotes from popular platforms: <code>7TV</code>, <code>BTTV</code> (BetterTTV), and <code>FFZ</code> (FrankerFaceZ).
+                </p>
+                <div class="box box-success">
+                    <p><span class="success">✓ Core Principle:</span> We respect your privacy and <span class="highlight">minimize</span> the collection and processing of personal data.</p>
+                </div>
+            </section>
+
+            <!-- 2. Data Collection -->
+            <section id="data-collection">
+                <h2>2. What Data Do We Collect?</h2>
+
+                <h3>2.1 Data We Do NOT Collect</h3>
+                <div class="box box-success">
+                    <ul>
+                        <li><span class="success">✓</span> Personal information (name, email, address, phone)</li>
+                        <li><span class="success">✓</span> IP addresses or location data</li>
+                        <li><span class="success">✓</span> Browsing history or cookies</li>
+                        <li><span class="success">✓</span> Passwords or login credentials</li>
+                        <li><span class="success">✓</span> Account identifiers</li>
+                        <li><span class="success">✓</span> Usage analytics or activity tracking</li>
+                    </ul>
+                </div>
+
+                <h3>2.2 Data Stored Locally</h3>
+                <p>The only data that the extension saves is your <span class="highlight">favorite emotes</span>:</p>
+                <ul>
+                    <li><strong>Emote names</strong> (text strings, e.g., "Kappa", "monkaS")</li>
+                    <li><strong>Emote image URLs</strong></li>
+                    <li><strong>Skin tone settings</strong> (for emotes with modifiers)</li>
+                    <li><strong>Category states</strong> (expanded/collapsed sections)</li>
+                </ul>
+
+                <h3>2.3 Data Used with APIs</h3>
+                <p>To display the current list of emotes, the extension makes requests to <span class="highlight">public APIs</span> of the following services:</p>
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th>Service</th>
+                            <th>Purpose</th>
+                            <th>Transmitted Data</th>
+                        </tr>
+                        <tr>
+                            <td><strong>7TV.io</strong></td>
+                            <td>Fetch 7TV emotes</td>
+                            <td>Twitch channel name (in URL)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>BTTV.net</strong></td>
+                            <td>Fetch BetterTTV emotes</td>
+                            <td>Twitch user ID (in URL)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FFZ.com</strong></td>
+                            <td>Fetch FrankerFaceZ emotes</td>
+                            <td>Twitch channel name (in URL)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Twitch.tv API</strong></td>
+                            <td>Get channel information</td>
+                            <td>Channel name and ID</td>
+                        </tr>
+                    </table>
+                </div>
+                <p><strong>Important:</strong> These requests only send <span class="highlight">channel name/ID</span> — no personal information is transmitted.</p>
+            </section>
+
+            <!-- 3. Data Storage -->
+            <section id="data-storage">
+                <h2>3. How Do We Store Data?</h2>
+
+                <h3>3.1 Local Storage (Chrome Storage)</h3>
+                <p>All your favorite emote data is stored <span class="highlight">exclusively locally</span> in your browser using <code>chrome.storage.local</code>:</p>
+                <div class="box">
+                    <ul>
+                        <li>📍 <strong>Storage Location:</strong> your computer's local disk</li>
+                        <li>🔒 <strong>Access:</strong> only 7BTVFZ extension can access it</li>
+                        <li>🚫 <strong>Transmission:</strong> data never sent to servers</li>
+                        <li>⏱️ <strong>Lifespan:</strong> stored until extension is uninstalled</li>
+                    </ul>
+                </div>
+
+                <h3>3.2 What Happens When You Uninstall?</h3>
+                <p>When you uninstall the extension, Chrome <span class="success">automatically deletes</span> all associated data from your device.</p>
+            </section>
+
+            <!-- 4. Third-Party Services -->
+            <section id="third-party">
+                <h2>4. Third-Party Services</h2>
+                <p>The extension uses the following third-party platforms to fetch emote lists:</p>
+
+                <h3>4.1 7TV (7tv.io)</h3>
+                <p>
+                    <strong>What is it:</strong> A platform for creating and sharing custom emotes for Twitch.
+                </p>
+                <p>
+                    <strong>Data transmitted:</strong> Channel name (in URL request).
+                </p>
+                <p>
+                    <strong>Privacy Policy:</strong> <a href="https://7tv.io" style="color: #c4b5fd;">https://7tv.io</a>
+                </p>
+
+                <h3>4.2 BetterTTV (betterttv.net)</h3>
+                <p>
+                    <strong>What is it:</strong> A popular extension for improving Twitch viewing experience.
+                </p>
+                <p>
+                    <strong>Data transmitted:</strong> Twitch user ID (in URL request).
+                </p>
+                <p>
+                    <strong>Privacy Policy:</strong> <a href="https://betterttv.net" style="color: #c4b5fd;">https://betterttv.net</a>
+                </p>
+
+                <h3>4.3 FrankerFaceZ (frankerfacez.com)</h3>
+                <p>
+                    <strong>What is it:</strong> A Twitch extension with emote support and theming options.
+                </p>
+                <p>
+                    <strong>Data transmitted:</strong> Channel name (in URL request).
+                </p>
+                <p>
+                    <strong>Privacy Policy:</strong> <a href="https://frankerfacez.com" style="color: #c4b5fd;">https://frankerfacez.com</a>
+                </p>
+
+                <div class="box box-warning">
+                    <p><strong>⚠️ Important:</strong> We do <strong>not control</strong> the privacy policies of these services. You accept their terms when using the extension.</p>
+                </div>
+            </section>
+
+            <!-- 5. User Control -->
+            <section id="user-control">
+                <h2>5. Your Control Over Data</h2>
+
+                <h3>5.1 Managing Favorite Emotes</h3>
+                <ul>
+                    <li><strong>Add:</strong> Click any emote in the picker or use Ctrl+Click</li>
+                    <li><strong>Remove:</strong> Click a favorited emote to remove it</li>
+                    <li><strong>View:</strong> Open the "Favorites" tab in the picker window</li>
+                </ul>
+
+                <h3>5.2 Uninstalling the Extension</h3>
+                <p>If you want to completely remove the extension:</p>
+                <ol>
+                    <li>Open <code>chrome://extensions/</code> in your address bar</li>
+                    <li>Find <strong>7BTVFZ Emote Picker</strong></li>
+                    <li>Click the <strong>"Remove"</strong> button</li>
+                    <li>All data will be <span class="success">automatically deleted</span></li>
+                </ol>
+
+                <h3>5.3 Accessing Storage Data</h3>
+                <p>Chrome allows you to inspect all extension data:</p>
+                <ol>
+                    <li>Open Developer Tools (<kbd>F12</kbd> or <kbd>Ctrl+Shift+I</kbd>)</li>
+                    <li>Go to the <strong>Application</strong> tab</li>
+                    <li>In the left menu, find <strong>Storage → Local Storage</strong></li>
+                    <li>Select the <strong>7BTVFZ Emote Picker</strong> extension</li>
+                </ol>
+            </section>
+
+            <!-- 6. Security -->
+            <section id="security">
+                <h2>6. Security</h2>
+
+                <h3>6.1 How Do We Protect Your Data?</h3>
+                <ul>
+                    <li>✓ All data is stored <span class="highlight">locally in your browser</span>, not on servers</li>
+                    <li>✓ <span class="highlight">Secure HTTPS connections</span> are used for all API requests</li>
+                    <li>✓ The extension only requests <span class="highlight">necessary permissions</span></li>
+                    <li>✓ Extension code is <span class="highlight">open for inspection</span> (open-source)</li>
+                </ul>
+
+                <h3>6.2 What You Should Know</h3>
+                <div class="box">
+                    <p>
+                        <strong>Note:</strong> If your computer is compromised or infected with malware, an attacker could theoretically access local Chrome data. However, this applies to all extensions and browsers.
+                    </p>
+                </div>
+            </section>
+
+            <!-- 7. Policy Changes -->
+            <section id="changes">
+                <h2>7. Policy Changes</h2>
+                <p>
+                    We may update this privacy policy at any time. For material changes:
+                </p>
+                <ul>
+                    <li>We will update the "Effective Date" at the top of this page</li>
+                    <li>You may receive a notification in the extension (if applicable)</li>
+                    <li>Continued use of the extension means acceptance of new terms</li>
+                </ul>
+            </section>
+
+            <!-- 8. Contact -->
+            <section id="contact">
+                <h2>8. Contact Us</h2>
+                <p>
+                    If you have questions, concerns, or suggestions about our privacy policy, please reach out:
+                </p>
+                <div class="contact-info">
+                    <p><strong>Email:</strong> <code>mahammadieret@gmail.com</code></p>
+                  </div>
+            </section>
+
+            <div class="footer">
+                <p>© 2026 7BTVFZ Emote Picker. All rights reserved.</p>
+                <p>Last updated: March 2026</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Language switching
+        const buttons = document.querySelectorAll('.lang-btn');
+        const ruContent = document.querySelector('.content-ru');
+        const enContent = document.querySelector('.content-en');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const lang = btn.dataset.lang;
+                
+                if (lang === 'ru') {
+                    ruContent.classList.add('active');
+                    enContent.classList.remove('active');
+                } else {
+                    enContent.classList.add('active');
+                    ruContent.classList.remove('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
