@@ -51,11 +51,13 @@ A modern alternative to the default Twitch picker and the FrankerFaceZ extension
 
 <img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/2f23c7fc-7e44-43a4-b81d-6b94122f2334" />
 
-## Installation (currently for developers only)
+## Installation (currently for developers Mode only)
 1. Download the repository as ZIP
-2. Go to Chrome → `chrome://extensions/`
-3. Enable “Developer mode”
-4. Click “Load unpacked” → select the folder containing `manifest.json`
+2. unpack the zip folder
+3. Go to Chrome → `chrome://extensions/`
+4. Enable “Developer mode”
+5. move and drop the folder named as ,,7BTVFZ_v2.024.26_picker'' 
+6. or just Click “Load unpacked” → select the folder containing `manifest.json`
  
 
 
