@@ -122,7 +122,7 @@
        font-size: 14px !important; overflow-wrap: break-word !important; 
     }
     #copyBtn-txtmt-4nrd5e:hover, #pasteBtn-popemt-4nrd5e:hover,
-    #sendemt-in-chat-4nrd5e:hover, #close-popemts-4nrd5e:hover,
+    #sendemt-in-chat-4nrd5e:hover, #close-empopup-7tvfzpicker-exjkl35htd38:hover,
     #see-emotlink-onsvntvapp-4nrd5e:hover {
         color: rgb(217 231 157 / 90%) !important; 
         cursor: pointer !important;
@@ -952,7 +952,9 @@
           const node = nodes[i];
           if (node.type === 'zw-temp') {
               let found = false;
+              // ✅ Второй проход — ZW-прикрепление
               for (let j = finalNodes.length - 1; j >= 0; j--) {
+                  if (finalNodes[j].type === 'text' && finalNodes[j].value.trim() !== '') break; // ← СТОП
                   if (finalNodes[j].type === 'emote') {
                       finalNodes[j].overlays.push({
                           name: node.name,
