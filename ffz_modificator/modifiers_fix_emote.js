@@ -77,8 +77,31 @@
     }
 
     const MODIFIERS = {
-        'ffzW': applyWide,
-        'w!':   applyWide,
+        'ffzW':     applyWide,
+        'w!':       applyWide,
+
+        // ffzCursed / c! — чёрно-белый + искажённый фильтр
+        'ffzCursed': (img) => img.classList.add('sep-mod-cursed'),
+        'c!':        (img) => img.classList.add('sep-mod-cursed'),
+
+        // Остальные из emote_modifiers.js — подключаем сразу все
+        'ffzY':     (img) => img.classList.add('sep-mod-flip-y'),
+        'ffzX':     (img) => img.classList.add('sep-mod-flip-x'),
+        'ffzSpin':  (img) => img.classList.add('sep-mod-spin'),
+        'ffzBounce':(img) => img.classList.add('sep-mod-bounce'),
+        'ffzJam':   (img) => img.classList.add('sep-mod-jam'),
+        'ffzRainbow':(img) => img.classList.add('sep-mod-rainbow'),
+        'ffzHyper': (img) => img.classList.add('sep-mod-hyper'),
+        'ffzSlide': (img) => img.classList.add('sep-mod-slide'),
+        'ffzArrive':(img) => img.classList.add('sep-mod-arrive'),
+        'ffzLeave': (img) => img.classList.add('sep-mod-leave'),
+        'h!':       (img) => img.classList.add('sep-mod-flip-x'),
+        'v!':       (img) => img.classList.add('sep-mod-flip-y'),
+        'l!':       (img) => img.classList.add('sep-mod-tilt-l'),
+        'r!':       (img) => img.classList.add('sep-mod-tilt-r'),
+        's!':       (img) => img.classList.add('sep-mod-hyper'),
+        'p!':       (img) => img.classList.add('sep-mod-party'),
+        'R!':       (img) => img.classList.add('sep-mod-rainbow'),
     };
 
     // ── Обработка 7TV/BTTV + отдельный ffzW токен ────────────────────────────
