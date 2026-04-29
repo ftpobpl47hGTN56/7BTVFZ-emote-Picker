@@ -2,7 +2,7 @@
 // Никаких DOM / Chrome API — только данные
 'use strict';
 
-const PAGE_SIZE        = 400;
+const PAGE_SIZE        = 300;
  
 // ── Skin Tone ─────────────────────────────────────────────────────────────────
 const SKIN_TONE_MODIFIERS = ['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}'];

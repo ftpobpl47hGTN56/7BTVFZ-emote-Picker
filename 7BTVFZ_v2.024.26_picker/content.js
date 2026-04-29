@@ -122,7 +122,7 @@
        font-size: 14px !important; overflow-wrap: break-word !important; 
     }
     #copyBtn-txtmt-4nrd5e:hover, #pasteBtn-popemt-4nrd5e:hover,
-    #sendemt-in-chat-4nrd5e:hover, #close-popemts-4nrd5e:hover,
+    #sendemt-in-chat-4nrd5e:hover, #close-empopup-7tvfzpicker-exjkl35htd38:hover,
     #see-emotlink-onsvntvapp-4nrd5e:hover {
         color: rgb(217 231 157 / 90%) !important; 
         cursor: pointer !important;
@@ -847,18 +847,22 @@
           ffzImg.classList.add('sep-emote-base');
 
           // 5. Все картинки из 7TV-wrap превращаем в оверлеи
+          // 5. Переносим только ZW как оверлеи
           const sevenTvImages = Array.from(nextWrap.querySelectorAll('img'));
-          sevenTvImages.forEach(img => {
+          const zwImages = sevenTvImages.filter(img => emoteMap.get(img.alt)?.zeroWidth);
+
+          if (!zwImages.length) continue;
+
+          zwImages.forEach(img => {
               img.classList.remove('sep-emote-base', 'sep-chat-emote');
               img.classList.add('sep-emote-overlay', 'chat-image');
               wrap.appendChild(img);
           });
 
-          // 6. Удаляем старый 7TV-контейнер
-          if (nextTextFragment) {
-              nextTextFragment.remove();
-          } else {
-              nextWrap.remove();
+          // 6. Удаляем контейнер только если все img были ZW
+          if (zwImages.length === sevenTvImages.length) {
+              if (nextTextFragment) nextTextFragment.remove();
+              else nextWrap.remove();
           }
                       // После всех манипуляций с wrap
           applyEmoteAspectRatio(wrap);
@@ -952,7 +956,9 @@
           const node = nodes[i];
           if (node.type === 'zw-temp') {
               let found = false;
+              // ✅ Второй проход — ZW-прикрепление
               for (let j = finalNodes.length - 1; j >= 0; j--) {
+                  if (finalNodes[j].type === 'text' && finalNodes[j].value.trim() !== '') break; // ← СТОП
                   if (finalNodes[j].type === 'emote') {
                       finalNodes[j].overlays.push({
                           name: node.name,

@@ -1,13 +1,16 @@
-// ============ EmotePopup-7BTVFZ.js ============ //
+// ============ EmotePopup-7TV-bttv-FFZ-ttv.js ============ //
+
 (function () {
 
     // ─── Утилита: извлекает 7TV emote ID из CDN-ссылки ───────────────────────
+    
     function get7tvId(src) {
         const match = src && src.match(/7tv\.app\/emote\/([^/]+)/);
         return match ? match[1] : null;
     }
 
     // ─── Определяем платформу по URL или data-provider ───────────────────────
+    
     function detectPlatform(img) {
         const dp = img.getAttribute('data-provider') || '';
         const src = img.src || '';
@@ -21,6 +24,7 @@
     }
 
     // ─── Собираем все смайлы из сообщения ────────────────────────────────────
+    
     function getEmotesFromMessage(container) {
         const selector = [
             '.sep-chat-emote',
@@ -60,13 +64,14 @@
     }
 
      // ─── Главная функция — создать попап ───────────────────────────
+    
     function showCustomEmotePopup(emotes, clickX, clickY, callbacks = {}) {
-        document.getElementById('sep-emote-popup')?.remove();
+        document.getElementById('sepem-popup-7tvfzpicker')?.remove();
 
         if (!emotes.length) return;
 
         const popup = document.createElement('div');
-        popup.id = 'sep-emote-popup';
+        popup.id = 'sepem-popup-7tvfzpicker';
         Object.assign(popup.style, {
             position:     'fixed',
             zIndex:       '999999',
@@ -108,7 +113,7 @@
 
         const closeBtn = document.createElement('button');
         closeBtn.textContent = '✕';
-        closeBtn.id = 'close-popemts-4nrd5e';
+        closeBtn.id = 'close-empopup-7tvfzpicker-exjkl35htd38';
         Object.assign(closeBtn.style, {
             background:   'none',
             border:       'none',
@@ -354,17 +359,18 @@
             if (suppressNextOutside) return;
             const linkedPopup = document.getElementById('emote-selection-popup');
             if (!popup.contains(e.target) && (!linkedPopup || !linkedPopup.contains(e.target))) {
-              //   popup.remove(); // 
+              /*   popup.remove(); */ 
                 document.removeEventListener('click', outsideClick, true); //  true); false
             }
         };
-        setTimeout(() => {
+        /*  setTimeout(() => {
             document.addEventListener('click', outsideClick, true); //  true); false
-        }, 150);
+        }, 150);  */ 
     }
 
     
     // ─── Позиционирование попапа рядом с кликом ───────────────────────────────
+    
     function positionPopup(popup, clickX, clickY) {
         const W   = window.innerWidth;
         const H   = window.innerHeight;
@@ -384,6 +390,7 @@
     }
 
     // ─── Drag-функциональность ────────────────────────────────────────────────
+    
     function makeDraggable(popup, handle, onDragEnd) {
         let startX, startY, startLeft, startTop, dragging = false, didDrag = false;
 
@@ -425,12 +432,14 @@
     }
 
     // ─── Извлекает имена смайлов из массива emotes ────────────────────────────
+    
     function buildEmoteText(emotes) {
         const names = emotes.map(e => e.alt).filter(Boolean);
         return names.length ? ` ${names.join(' ')} ` : '';
     }
 
     // ─── Копирует текст смайлов в буфер обмена ───────────────────────────────
+    
     function copyEmotesToClipboard(emotes) {
         const text = buildEmoteText(emotes).trim();
         if (!text) return;
@@ -446,6 +455,7 @@
     }
 
     // ─── Вставляет текст в поле ввода чата ───────────────────────────────────
+    
     function pasteTextToInput(text) {
         const editors = document.querySelectorAll('[data-a-target="chat-input"]');
         let inputEditor = null;
@@ -521,10 +531,9 @@
             console.error('[EmotePopup] Ошибка вставки:', err);
         }
     }
- // ─── Отправляет текст в чат ( nter) ─────────────────────────────
-    
-   
+ 
     // ─── Обработчик кликов по смайлам в чате ─────────────────────────────────
+    
     function handleEmoteClick(e) {
         const emoteEl = e.target.closest(
             '.sep-chat-emote, .sep-emote-base, .sep-emote-overlay, ' +
@@ -549,8 +558,6 @@
     }
 
     document.body.addEventListener('click', handleEmoteClick, { capture: true });
-
     window.CustomEmotePopup = { show: showCustomEmotePopup, getEmotes: getEmotesFromMessage };
-
     console.log('[CustomEmotePopup] Loaded ✓');
 })();

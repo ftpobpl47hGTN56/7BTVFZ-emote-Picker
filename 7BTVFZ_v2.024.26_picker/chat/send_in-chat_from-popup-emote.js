@@ -1,6 +1,6 @@
-// ======= send_in-chat_from-sep-emote-popup.js ======== //
+// ======= send_in-chat_from-sepem-popup-7tvfzpicker.js ======== //
 
-// Определяет функцию sendToChat() для кнопки "send" в sep-emote-popup
+// Определяет функцию sendToChat() для кнопки "send" в sepem-popup-7tvfzpicker
 // и следит за появлением попапа через MutationObserver.
 // Последнее обновление: март 2026
 
@@ -126,15 +126,15 @@
             }, 50);
         }, { capture: false });
 
-        log('Кнопка send в sep-emote-popup подключена');
+        log('Кнопка send в sepem-popup-7tvfzpicker подключена');
     }
 
     // ────────────────────────────────────────────────────────────────
-    // 6. MutationObserver — следим за появлением sep-emote-popup
+    // 6. MutationObserver — следим за появлением sepem-popup-7tvfzpicker
     // ────────────────────────────────────────────────────────────────
     function watchForPopup() {
         // Проверяем сразу (вдруг попап уже есть)
-        const existing = document.getElementById('sep-emote-popup');
+        const existing = document.getElementById('sepem-popup-7tvfzpicker');
         if (existing) patchSendButton(existing);
 
         const observer = new MutationObserver((mutations) => {
@@ -142,11 +142,11 @@
                 for (const node of mutation.addedNodes) {
                     if (node.nodeType !== 1) continue;
 
-                    if (node.id === 'sep-emote-popup') {
+                    if (node.id === 'sepem-popup-7tvfzpicker') {
                         patchSendButton(node);
                         continue; // ← не проверяем querySelector если уже нашли
                     }
-                    const inner = node.querySelector?.('#sep-emote-popup');
+                    const inner = node.querySelector?.('#sepem-popup-7tvfzpicker');
                     if (inner) patchSendButton(inner);
                 }
             }
@@ -157,7 +157,7 @@
             subtree:   true,
         });
 
-        log('MutationObserver запущен — слежу за sep-emote-popup');
+        log('MutationObserver запущен — слежу за sepem-popup-7tvfzpicker');
     }
 
     // ────────────────────────────────────────────────────────────────
