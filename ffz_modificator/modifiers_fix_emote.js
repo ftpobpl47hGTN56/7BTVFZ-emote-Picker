@@ -85,50 +85,72 @@
     // (FFZ эмоуты FFZ сам обрабатывает через .modified-emote — нам не нужно)
 
     function processMessage(msgEl) {
+        // ── Случай 1: обёрнутый в .ffz--inline (стандартный) ─────────────────
         const ffzEls = msgEl.querySelectorAll(
             '.ffz--inline:not(.modified-emote):not([data-ffz-applied])'
         );
 
         ffzEls.forEach((ffzEl) => {
             const modImg = ffzEl.querySelector('img[alt]');
-            if (!modImg) {
-                ffzEl.setAttribute('data-ffz-applied', 'skip');
-                return;
-            }
+            if (!modImg) { ffzEl.setAttribute('data-ffz-applied', 'skip'); return; }
 
             const modName = modImg.getAttribute('alt')?.trim();
             const applyFn = MODIFIERS[modName];
+            if (!applyFn) { ffzEl.setAttribute('data-ffz-applied', 'skip'); return; }
 
-            if (!applyFn) {
-                ffzEl.setAttribute('data-ffz-applied', 'skip');
-                return;
-            }
-
-            // Ищем ближайший .sep-emote-wrap ДО ffzEl (7TV/BTTV эмоут)
-            const wraps = msgEl.querySelectorAll('.sep-emote-wrap');
-            let target = null;
-
-            for (const wrap of wraps) {
-                const pos = wrap.compareDocumentPosition(ffzEl);
-                if (pos & Node.DOCUMENT_POSITION_FOLLOWING) {
-                    target = wrap;
-                } else {
-                    break;
-                }
-            }
-
+            const target = findPrevEmoteWrap(msgEl, ffzEl);
             if (target) {
                 const img = target.querySelector('img.sep-emote-base') || target.querySelector('img');
-                if (img) {
-                    applyFn(img);
-                    ffzEl.setAttribute('data-ffz-applied', '1');
-                } else {
-                    ffzEl.setAttribute('data-ffz-applied', 'no-target');
-                }
+                if (img) { applyFn(img); ffzEl.setAttribute('data-ffz-applied', '1'); }
+                else { ffzEl.setAttribute('data-ffz-applied', 'no-target'); }
             } else {
                 ffzEl.setAttribute('data-ffz-applied', 'no-target');
             }
         });
+
+        // ── Случай 2: голый img-модификатор без .ffz--inline (reply и др.) ───
+        const bareImgs = msgEl.querySelectorAll(
+            'img.ffz-emote:not([data-ffz-applied])'
+        );
+
+        bareImgs.forEach((modImg) => {
+            // Пропускаем если img уже внутри .ffz--inline — там уже обработан выше
+            if (modImg.closest('.ffz--inline')) return;
+
+            const modName = modImg.getAttribute('alt')?.trim();
+            const applyFn = MODIFIERS[modName];
+            if (!applyFn) { modImg.setAttribute('data-ffz-applied', 'skip'); return; }
+
+            const target = findPrevEmoteWrap(msgEl, modImg);
+            if (target) {
+                const img = target.querySelector('img.sep-emote-base') || target.querySelector('img');
+                if (img) {
+                    applyFn(img);
+                    // Скрываем голый img-модификатор
+                    modImg.style.cssText = 'display:none!important;width:0!important;margin:0!important;';
+                    modImg.setAttribute('data-ffz-applied', '1');
+                } else {
+                    modImg.setAttribute('data-ffz-applied', 'no-target');
+                }
+            } else {
+                modImg.setAttribute('data-ffz-applied', 'no-target');
+            }
+        });
+    }
+
+    // ── Вынести общую логику поиска цели в отдельную функцию ─────────────────────
+    function findPrevEmoteWrap(msgEl, referenceEl) {
+        const wraps = msgEl.querySelectorAll('.sep-emote-wrap');
+        let target = null;
+        for (const wrap of wraps) {
+            const pos = wrap.compareDocumentPosition(referenceEl);
+            if (pos & Node.DOCUMENT_POSITION_FOLLOWING) {
+                target = wrap;
+            } else {
+                break;
+            }
+        }
+        return target;
     }
 
     function processAll() {
