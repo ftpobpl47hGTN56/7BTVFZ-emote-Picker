@@ -25,7 +25,7 @@ div#__emote_tooltip_iife__ {
    top: 338px;
    width: 235px !important;
 }
-   #sep-emote-popup {
+   #sepem-popup-7tvfzpicker {
         word-break: break-all;
         position: fixed;
         z-index: 9999999  !important;
@@ -60,8 +60,7 @@ div#__emote_tooltip_iife__ {
         border-radius: .5rem !important;
         background-color: var(--bg-medium) !important;
         box-shadow: 4px 4px 8px #0000001a !important;
-    } 
-  
+    }  
     `;
     
     const styleElement = document.createElement('style');

@@ -847,18 +847,22 @@
           ffzImg.classList.add('sep-emote-base');
 
           // 5. Все картинки из 7TV-wrap превращаем в оверлеи
+          // 5. Переносим только ZW как оверлеи
           const sevenTvImages = Array.from(nextWrap.querySelectorAll('img'));
-          sevenTvImages.forEach(img => {
+          const zwImages = sevenTvImages.filter(img => emoteMap.get(img.alt)?.zeroWidth);
+
+          if (!zwImages.length) continue;
+
+          zwImages.forEach(img => {
               img.classList.remove('sep-emote-base', 'sep-chat-emote');
               img.classList.add('sep-emote-overlay', 'chat-image');
               wrap.appendChild(img);
           });
 
-          // 6. Удаляем старый 7TV-контейнер
-          if (nextTextFragment) {
-              nextTextFragment.remove();
-          } else {
-              nextWrap.remove();
+          // 6. Удаляем контейнер только если все img были ZW
+          if (zwImages.length === sevenTvImages.length) {
+              if (nextTextFragment) nextTextFragment.remove();
+              else nextWrap.remove();
           }
                       // После всех манипуляций с wrap
           applyEmoteAspectRatio(wrap);
