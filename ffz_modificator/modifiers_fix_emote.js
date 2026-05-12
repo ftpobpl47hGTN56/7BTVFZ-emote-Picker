@@ -28,24 +28,30 @@
             object-fit: fill !important;
         }
 
-        /* ── 7TV/BTTV эмоут + ffzW ──────────────────────────────────────────
-         * sep рендерит .sep-emote-wrap + отдельный .ffz--inline[alt=ffzW].
-         * Применяем реальную ширину через JS (см. applyWide ниже).
-         * ─────────────────────────────────────────────────────────────────── */
-        .sep-mod-ffzW {
-            object-fit: fill !important;
-            display: inline-block !important;
-            vertical-align: middle !important;
-        }
+ /* ── 7TV/BTTV эмоут + ffzW ──────────────────────────────────────────
+    * sep рендерит .sep-emote-wrap + отдельный .ffz--inline[alt=ffzW].
+    * Применяем реальную ширину через JS (см. applyWide ниже).
+    * ─────────────────────────────────────────────────────────────────── */
+    .sep-mod-ffzW {
+        object-fit: fill !important;
+        display: inline-block !important;
+        vertical-align: middle !important;
+        margin-left: -60px !important;
+    }
 
-        /* Скрываем ТОЛЬКО отдельно стоящий токен-модификатор (не modified-emote) */
-        .ffz--inline:not(.modified-emote)[data-ffz-applied="1"],
-        .ffz--inline:not(.modified-emote)[data-ffz-applied="no-target"] {
+    /* Скрываем ТОЛЬКО отдельно стоящий токен-модификатор (не modified-emote) */
+    .ffz--inline:not(.modified-emote)[data-ffz-applied="1"],
+    .ffz--inline:not(.modified-emote)[data-ffz-applied="no-target"] {
             display: none !important;
             width: 0 !important;
             margin: 0 !important;
             padding: 0 !important;
-        }
+    }
+    /* Оверлей наследует ширину от wrap-а при ffzW */
+    .sep-emote-wrap:has(.sep-mod-ffzW) .sep-emote-overlay {
+        width: var(--sep-wide-w, auto) !important;
+        object-fit: fill !important;
+    }
     `;
 
     const styleEl = document.createElement('style');
@@ -67,7 +73,17 @@
             if (attempt > 30) return;
             const h = img.offsetHeight;
             if (h > 0) {
-                img.style.width = (h * 2.2) + 'px';
+                const w = (h * 2.2) + 'px';
+                img.style.width = w;
+                // Передаём ширину оверлеям в том же wrap-е
+                const wrap = img.closest('.sep-emote-wrap');
+                if (wrap) {
+                    wrap.style.setProperty('--sep-wide-w', w);
+                    wrap.querySelectorAll('.sep-emote-overlay').forEach(ov => {
+                        ov.style.width = w;
+                        ov.style.objectFit = 'fill';
+                    });
+                }
                 return;
             }
             requestAnimationFrame(() => trySet(attempt + 1));

@@ -1,6 +1,115 @@
 // chat/emote_modifiers.js
 
  
+// ====== Настройки из сеп оверлей алайнер  12.05.2026 ======
+// sep_overlay_align_v2.js
+// ========================================================================================
+
+// ====== SEP Overlay Align — production ======
+// sep_overlay_align_v3.js  12.05.2026
+// ========================================================================================
+
+// Читает настройки из localStorage (сохранённые панелью-редактором).
+// Чтобы захардкодить — замени блок load() на объект s вручную (см. комментарий ниже).
+
+// ========================================================================================
+// ========================================================================================
+
+// Reads settings from localStorage (saved by the editor panel).
+// To hardcode, replace the load() block with the s object manually (see the comment below).
+// ========================================================================================
+
+(function () {
+  'use strict';
+
+  let s;
+  try { s = JSON.parse(localStorage.getItem('sep_overlay_align_v3')); } catch {}
+
+  // Defaults - in caseif  localStorage is empty or the key is not found.
+  // You can also insert hard-coded values here instead of load():
+
+  // =============================================================== 
+
+  // Дефолты — на случай если localStorage пуст или ключ не найден.
+  // Сюда же можно вставить захардкодетнные значения вместо load():
+  //
+  //   s = {
+  //     wrapVerticalAlign : 'middle',
+  //     baseJustify       : 'center',
+  //     baseAlign         : 'center',
+  //     nudgeX            : 0,
+  //     nudgeY            : 0,
+  //     modVerticalAlign  : 'middle',
+  //     modJustify        : 'center',
+  //     modAlign          : 'center',
+  //     modNudgeX         : 0,
+  //     modNudgeY         : 0,
+  //     modMarginRight    : 0,
+  //   };
+
+  s = Object.assign({
+    wrapVerticalAlign : 'bottom',
+    baseJustify       : 'flex-start',
+    baseAlign         : 'flex-end',
+    nudgeX            : 0,
+    nudgeY            : 0,
+    modVerticalAlign  : 'bottom',
+    modJustify        : 'flex-start',
+    modAlign          : 'flex-end',
+    modNudgeX         : 0,
+    modNudgeY         : 0,
+    modMarginRight    : 0,
+  }, s);
+
+  const css = `
+/* ── 1. Обычный оверлей (без sep-mod-* на base) ── */
+.sep-emote-wrap:has(.sep-emote-overlay):not(:has([class*="sep-mod-"])) {
+  display         : inline-flex            !important;
+  vertical-align  : ${s.wrapVerticalAlign} !important;
+  justify-content : ${s.baseJustify}       !important;
+  align-items     : ${s.baseAlign}         !important;
+}
+.sep-emote-wrap:has(.sep-emote-overlay):not(:has([class*="sep-mod-"])) .sep-emote-base {
+  flex-shrink : 0 !important;
+  position    : relative !important;
+  transform   : translateX(${s.nudgeX}px) translateY(${s.nudgeY}px) !important;
+}
+.sep-emote-wrap:has(.sep-emote-overlay):not(:has([class*="sep-mod-"])) .sep-emote-overlay {
+  position : absolute !important;
+}
+
+/* ── 2. Оверлей с модификатором (sep-mod-ffzW и др.) ── */
+.sep-emote-wrap:has(.sep-emote-overlay):has([class*="sep-mod-"]) {
+  display         : inline-flex           !important;
+  vertical-align  : ${s.modVerticalAlign} !important;
+  justify-content : ${s.modJustify}       !important;
+  align-items     : ${s.modAlign}         !important;
+  width           : var(--sep-wide-w)     !important;
+  margin-right    : ${s.modMarginRight}px !important;
+}
+.sep-emote-wrap:has(.sep-emote-overlay):has([class*="sep-mod-"]) .sep-emote-base {
+  flex-shrink : 0 !important;
+  position    : relative !important;
+  transform   : translateX(${s.modNudgeX}px) translateY(${s.modNudgeY}px) !important;
+}
+.sep-emote-wrap:has(.sep-emote-overlay):has([class*="sep-mod-"]) .sep-emote-overlay {
+    position: absolute !important;
+    max-height: 64px !important;
+    max-width: 150px !important; 
+    height: 64px !important;
+}
+    `;
+
+  const el = document.createElement('style');
+  el.id = 'sep-overlay-align';
+  document.head.appendChild(el);
+  el.textContent = css;
+
+})();
+
+
+
+
 const EmoteModifiers = {
     map: {
         // FFZ
@@ -39,51 +148,50 @@ const EmoteModifiers = {
 
 /* Фикс: FFZ ставит max-height: 620px на все img в чате,
    возвращаем нормальный размер для sep-эмоутов */
-.chat-line__message img.sep-emote-base {
-    max-height: 64px !important;
-  max-width: 620px !important; 
-    height: 64px !important;
-}
+    .chat-line__message img.sep-emote-base {
+        max-height: 64px !important;
+        max-width: 150px !important; 
+        height: 64px !important;
+    }
 
 /* Для ffzW ширина уже выставлена через JS (width: 140.8px),
    но max-height не должен её ломать */
 .chat-line__message img.sep-emote-base.sep-mod-ffzW {
     max-height: 64px !important;
     height: 64px !important;
-    max-width: 320px !important;   /* разрешаем быть шире 320px */
-width: 620px !important;
+    max-width: 150px !important; 
     object-fit: fill !important;
 }
 
     .sep-emote-wrap .ffz--inline {
-    display: inline-block !important;
-    position: relative !important;
-    z-index: 0 !important;
+        display: inline-block !important;
+        position: relative !important;
+        z-index: 0 !important;
     }
     .sep-emote-wrap img.ffz-emote,
     .sep-emote-wrap img.ffz-emoji {
-    vertical-align: middle !important;
-    z-index: 999999 !important;
-    position: relative !important;
+            vertical-align: middle !important;
+            z-index: 999999 !important;
+            position: relative !important;
     }
     .sep-emote-base {
-    display: inline-block;
-    transition: transform 0.2s;
-    /* Переменные для комбинирования эффектов */
-    --sep-scale-x: 1;
-    --sep-scale-y: 1; 
-    transform: scaleX(var(--sep-scale-x)) scaleY(var(--sep-scale-y)) rotate(var(--sep-rotate)) !important;
+            display: inline-block;
+            transition: transform 0.2s;
+            /* Переменные для комбинирования эффектов */
+            --sep-scale-x: 1;
+            --sep-scale-y: 1; 
+            transform: scaleX(var(--sep-scale-x)) scaleY(var(--sep-scale-y)) rotate(var(--sep-rotate)) !important;
     }
 
     /* ----------- wide --------------*/
     .sep-mod-wide { 
-    --sep-scale-x: 2.4;
-    --sep-scale-y: 1.0;
-    --sep-rotate: 0deg;
-    margin: 0px -80px !important;   
+        --sep-scale-x: 2.4;
+        --sep-scale-y: 1.0;
+        --sep-rotate: 0deg;
+        margin: 0px -80px !important;   
     }
     .sep-emote-wrap:has(.sep-mod-wide) {
-    margin-left: 150px !important;
+          margin-left: 150px !important;
     }
 
     .sep-mod-flip-x {
