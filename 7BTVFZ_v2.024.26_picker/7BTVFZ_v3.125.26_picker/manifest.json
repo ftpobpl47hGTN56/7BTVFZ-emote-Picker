@@ -1,0 +1,87 @@
+{
+  "manifest_version": 3,
+  "name": "[twitch.tv] 7BTVFZ Emote Picker ",
+  "version": "3.125.26",
+  "description": "Custom emote picker for Twitch chat: 7TV, BTTV, FFZ",
+  "homepage_url": "https://r6ftjr5uynmjtr-tfjtry5e-ntf7.netlify.app",
+  "icons": {
+    "48": "assets/48tjtfjtfjjtf5665.png",
+    "64": "assets/64tjtfjtfjjtf5665.png",
+    "128": "assets/128tjtfjtfjjtf5665.png",
+    "256": "assets/256tjtfjtfjjtf5665.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.twitch.tv/*",
+    "https://7tv.app/*",
+    "https://7tv.io/*",
+    "https://betterttv.com/*",
+    "https://cdn.betterttv.net/*",
+    "https://api.betterttv.net/*",
+    "*://www.twitch.tv/*",
+    "*://7tv.io/*",
+    "*://events.7tv.io/*",
+    "wss://events.7tv.io/*",
+    "*://cdn.betterttv.net/*",
+    "https://api.frankerfacez.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.twitch.tv/*",
+        "https://www.twitch.tv/*"
+      ],
+      "js": [
+        "content-config.js",
+        "content-api.js",
+        "content-state.js",
+        "content-panel.js",
+        "content-chat.js",
+        "content-main.js",
+        "GraphQL-seventv-fix.js",
+        "Inject_css.js",
+        "ffz_modificator/modifiers_fix_emote.js",
+        "chat/emote-events.js",
+        "chat/send_in-chat_from-popup-emote.js",
+        "chat/EmotePopup-7BTVFZ.js",
+        "chat/autocomplete.js",
+        "chat/emoji-names.js",
+        "chat/fetchTwitchGlobalEmotes.js",
+        "chat/emote_modifiers.js",
+        
+        "chat/TOOLTIP_Emote_hover.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://7tv.app/*"
+      ],
+      "js": [
+        "GraphQL-seventv-fix.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "picker.html",
+        "picker.css",
+        "picker_popout/*",
+        "chat/*",
+        "ffz_modificator/*",
+        "assets/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
